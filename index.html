@@ -214,7 +214,6 @@ async function generateCodeChallenge(verifier) {
   return btoa(String.fromCharCode(...new Uint8Array(hash))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
 }
 
-const YOUTUBE_API_KEY = 'AIzaSyBIjS4tPrIc7wBIANwEr7SlPnCfJCkFWzk';
 
 window.searchYoutube = async function() {
 
