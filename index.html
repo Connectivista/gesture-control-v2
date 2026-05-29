@@ -258,10 +258,17 @@ async function execSpotifyAction(gesture) {
     case 'OPEN_HAND': {
       const state = await spotifyAPI('GET', '/me/player');
       if (state && state.is_playing) {
-        await spotifyAPI('PUT', '/me/player/pause');
+        await fetch('https://api.spotify.com/v1/me/player/pause', {
+          method: 'PUT',
+          headers: { Authorization: 'Bearer ' + accessToken }
+        });
         return 'Durduruldu';
       } else {
-        await spotifyAPI('PUT', '/me/player/play');
+        await fetch('https://api.spotify.com/v1/me/player/play', {
+          method: 'PUT',
+          headers: { Authorization: 'Bearer ' + accessToken, 'Content-Type': 'application/json' },
+          body: JSON.stringify({})
+        });
         return 'Caliniyor';
       }
     }
