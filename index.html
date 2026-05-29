@@ -136,6 +136,7 @@
   </div>
 </main>
 
+<script src="https://sdk.scdn.co/spotify-player.js"></script>
 <script type="module">
 import { FilesetResolver, HandLandmarker } from 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.mjs';
 
@@ -157,6 +158,8 @@ let lastGesture = null, lastActionTime = {};
 let logItems = [];
 let currentVolume = 50;
 let nowPlayingInterval = null;
+let player = null;
+let deviceId = null;
 
 const video = document.getElementById('video');
 
@@ -202,6 +205,7 @@ async function handleCallback() {
     localStorage.setItem('spotify_token', accessToken);
     window.history.replaceState({}, '', REDIRECT_URI);
     setSpotifyConnected(true);
+    initPlayer();
     startNowPlayingPolling();
   }
 }
@@ -233,6 +237,31 @@ async function spotifyAPI(method, endpoint, body) {
   return null;
 }
 
+function initPlayer() {
+  window.onSpotifyWebPlaybackSDKReady = () => {
+    player = new Spotify.Player({
+      name: 'GestureControl',
+      getOAuthToken: cb => cb(accessToken),
+      volume: 0.5
+    });
+    player.addListener('ready', ({ device_id }) => {
+      deviceId = device_id;
+      console.log('Spotify player hazir, device_id:', device_id);
+    });
+    player.addListener('player_state_changed', state => {
+      if (!state) return;
+      const track = state.track_window.current_track;
+      document.getElementById('nowTitle').textContent = track.name;
+      document.getElementById('nowArtist').textContent = track.artists.map(a=>a.name).join(', ');
+      const art = document.getElementById('nowArt');
+      if (track.album.images[0]) art.src = track.album.images[0].url;
+      document.getElementById('nowState').textContent = state.paused ? '⏸' : '▶';
+      document.getElementById('nowPlaying').classList.add('visible');
+    });
+    player.connect();
+  };
+}
+
 async function startNowPlayingPolling() {
   const update = async () => {
     const data = await spotifyAPI('GET', '/me/player');
@@ -256,24 +285,11 @@ async function execSpotifyAction(gesture) {
   if (!accessToken) return 'Spotify bagli degil';
   switch(gesture) {
     case 'OPEN_HAND': {
-      const state = await spotifyAPI('GET', '/me/player');
-      if (state && state.is_playing) {
-        await fetch('https://api.spotify.com/v1/me/player/pause', {
-          method: 'PUT',
-          headers: { Authorization: 'Bearer ' + accessToken }
-        });
-        return 'Durduruldu';
-      } else {
-        const devices = await spotifyAPI('GET', '/me/player/devices');
-        const device = devices?.devices?.find(d => d.is_active) || devices?.devices?.[0];
-        const deviceQuery = device ? '?device_id=' + device.id : '';
-        await fetch('https://api.spotify.com/v1/me/player/play' + deviceQuery, {
-          method: 'PUT',
-          headers: { Authorization: 'Bearer ' + accessToken, 'Content-Type': 'application/json' },
-          body: JSON.stringify({})
-        });
-        return 'Caliniyor';
+      if (player) {
+        await player.togglePlay();
+        return 'Cal / Durdur';
       }
+      return 'Player hazir degil';
     }
     case 'POINT_UP': await spotifyAPI('POST', '/me/player/next'); return 'Sonraki Sarki';
     case 'FIST': await spotifyAPI('POST', '/me/player/previous'); return 'Onceki Sarki';
@@ -414,7 +430,7 @@ if(window.location.search.includes('code=')) {
   handleCallback();
 } else {
   const saved = localStorage.getItem('spotify_token');
-  if(saved){ accessToken=saved; setSpotifyConnected(true); startNowPlayingPolling(); }
+  if(saved){ accessToken=saved; setSpotifyConnected(true); initPlayer(); startNowPlayingPolling(); }
 }
 </script>
 </body>
