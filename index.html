@@ -254,30 +254,20 @@ window.playVideo = function(videoId) {
 }
 
 window.toggleYoutube = function() {
-
   youtubeMode = !youtubeMode;
-
   const btn = document.getElementById('youtubeBtn');
-
+  const searchBox = document.getElementById('ytSearchBox');
   if (youtubeMode) {
-
     btn.textContent = 'YouTube Aktif';
-
     btn.style.background = 'rgba(255,0,0,0.2)';
-
-    document.getElementById('nowTitle').textContent = 'YouTube Modu Aktif';
-
-    document.getElementById('nowArtist').textContent = 'YouTube sekmesini actik tutun';
-
-    document.getElementById('nowPlaying').classList.add('visible');
-
+    searchBox.style.display = 'flex';
   } else {
-
     btn.textContent = 'YouTube Modu';
-
     btn.style.background = 'rgba(255,0,0,0.08)';
-
-    document.getElementById('nowPlaying').classList.remove('visible');
+    searchBox.style.display = 'none';
+    document.getElementById('ytResults').style.display = 'none';
+    document.getElementById('ytPlayerWrap').style.display = 'none';
+    document.getElementById('ytPlayer').src = 'about:blank';
 
   }
 
