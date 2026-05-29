@@ -146,7 +146,10 @@
 <header>
   <div class="logo"><div class="logo-dot"></div>GestureControl</div>
   <div class="header-right">
-    <button class="spotify-btn" id="spotifyBtn" onclick="spotifyAuth()">Spotify ile Bağlan</button>
+    <div style="position:relative; display:inline-flex;">
+      <button class="spotify-btn" id="spotifyBtn" onclick="spotifyAuth()" style="opacity:0.35; pointer-events:none;">Spotify ile Bağlan</button>
+      <span style="position:absolute; top:-8px; right:-8px; background:#7F77DD; color:#fff; font-family:'DM Mono',monospace; font-size:9px; padding:2px 6px; border-radius:100px; white-space:nowrap;">Coming Soon</span>
+    </div>
     <button class="yt-btn" id="ytBtn" onclick="toggleYoutube()">YouTube Modu</button>
     <div class="status-pill" id="statusPill"><div class="status-dot"></div><span id="statusText">Hazır</span></div>
   </div>
