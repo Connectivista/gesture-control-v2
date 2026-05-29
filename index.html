@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GestureControl</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<script src="https://www.youtube.com/iframe_api"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -25,8 +26,10 @@
   .status-pill.active .status-dot { background: var(--green); }
   .spotify-btn { display: flex; align-items: center; gap: 8px; padding: 7px 16px; border-radius: 100px; border: 1px solid rgba(29,185,84,0.3); background: rgba(29,185,84,0.08); color: var(--spotify); font-family: 'DM Mono', monospace; font-size: 11px; cursor: pointer; }
   .spotify-btn.connected { background: rgba(29,185,84,0.2); }
+  .yt-btn { display: flex; align-items: center; gap: 8px; padding: 7px 16px; border-radius: 100px; border: 1px solid rgba(255,0,0,0.3); background: rgba(255,0,0,0.08); color: #ff4444; font-family: 'DM Mono', monospace; font-size: 11px; cursor: pointer; }
+  .yt-btn.active { background: rgba(255,0,0,0.2); }
   main { position: relative; z-index: 10; flex: 1; display: grid; grid-template-columns: 1fr 300px; gap: 20px; padding: 24px 32px; max-width: 1100px; margin: 0 auto; width: 100%; }
-  .camera-section { display: flex; flex-direction: column; gap: 16px; }
+  .left-section { display: flex; flex-direction: column; gap: 16px; }
   .camera-wrap { position: relative; border-radius: 16px; overflow: hidden; border: 1px solid var(--border); background: var(--surface); aspect-ratio: 4/3; }
   #video { width: 100%; height: 100%; object-fit: cover; display: block; transform: scaleX(-1); }
   .camera-placeholder { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; color: var(--gray); }
@@ -50,6 +53,16 @@
   .start-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 14px; background: var(--purple-dim); border: 1px solid var(--purple-mid); border-radius: 12px; color: var(--purple); font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
   .start-btn:hover { background: rgba(127,119,221,0.2); }
   .start-btn.running { color: var(--red); border-color: rgba(226,75,74,0.4); background: rgba(226,75,74,0.08); }
+  .yt-search-wrap { display: none; flex-direction: column; gap: 10px; }
+  .yt-search-row { display: flex; gap: 10px; }
+  .yt-input { flex: 1; padding: 12px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; color: var(--white); font-family: 'Syne', sans-serif; font-size: 14px; outline: none; }
+  .yt-search-btn { padding: 12px 20px; background: rgba(255,0,0,0.1); border: 1px solid rgba(255,0,0,0.3); border-radius: 12px; color: #ff4444; font-family: 'Syne', sans-serif; font-size: 14px; cursor: pointer; white-space: nowrap; }
+  .yt-results { display: none; flex-direction: column; gap: 8px; max-height: 200px; overflow-y: auto; }
+  .yt-result-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; cursor: pointer; }
+  .yt-result-item:hover { border-color: rgba(255,0,0,0.3); }
+  .yt-result-img { width: 60px; border-radius: 6px; flex-shrink: 0; }
+  .yt-result-title { font-size: 12px; color: var(--white); }
+  .yt-player-wrap { display: none; border-radius: 16px; overflow: hidden; border: 1px solid var(--border); aspect-ratio: 16/9; }
   .sidebar { display: flex; flex-direction: column; gap: 16px; }
   .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 20px; }
   .card-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.1em; color: var(--gray); text-transform: uppercase; margin-bottom: 14px; }
@@ -79,39 +92,24 @@
   <div class="logo"><div class="logo-dot"></div>GestureControl</div>
   <div class="header-right">
     <button class="spotify-btn" id="spotifyBtn" onclick="spotifyAuth()">Spotify ile Baglan</button>
-
-    <button class="spotify-btn" id="youtubeBtn" onclick="toggleYoutube()" style="border-color:rgba(255,0,0,0.3);background:rgba(255,0,0,0.08);color:#ff4444;">YouTube Modu</button>
+    <button class="yt-btn" id="ytBtn" onclick="toggleYoutube()">YouTube Modu</button>
     <div class="status-pill" id="statusPill"><div class="status-dot"></div><span id="statusText">Hazir</span></div>
   </div>
 </header>
 <main>
-  <div class="camera-section">
-    <div id="ytSearchBox" style="display:none; gap:10px; margin-bottom:12px;" class="yt-search">
-
-      <input id="ytInput" type="text" placeholder="YouTube'da ara..."
-
-        style="flex:1; padding:12px 16px; background:var(--surface); border:1px solid var(--border); border-radius:12px; color:var(--white); font-family:'Syne',sans-serif; font-size:14px; outline:none;"
-
-        onkeydown="if(event.key==='Enter') searchYoutube()">
-
-      <button onclick="searchYoutube()"
-
-        style="padding:12px 20px; background:rgba(255,0,0,0.1); border:1px solid rgba(255,0,0,0.3); border-radius:12px; color:#ff4444; font-family:'Syne',sans-serif; font-size:14px; cursor:pointer; white-space:nowrap;">
-
-        Ara
-
-      </button>
-
+  <div class="left-section">
+    <!-- YouTube Search & Player -->
+    <div class="yt-search-wrap" id="ytSearchWrap">
+      <div class="yt-search-row">
+        <input class="yt-input" id="ytInput" type="text" placeholder="YouTube'da ara..." onkeydown="if(event.key==='Enter') searchYoutube()">
+        <button class="yt-search-btn" onclick="searchYoutube()">Ara</button>
+      </div>
+      <div class="yt-results" id="ytResults"></div>
+      <div class="yt-player-wrap" id="ytPlayerWrap">
+        <div id="ytPlayerDiv" style="width:100%;height:100%;"></div>
+      </div>
     </div>
-
-    <div id="ytResults" style="display:none; flex-direction:column; gap:8px; margin-bottom:12px; max-height:200px; overflow-y:auto;"></div>
-
-    <div id="ytPlayerWrap" style="display:none; position:relative; border-radius:16px; overflow:hidden; border:1px solid var(--border); aspect-ratio:16/9; margin-bottom:12px;">
-
-      <div id="ytPlayer" style="width:100%;height:100%;"></div>
-
-    </div>
-
+    <!-- Camera -->
     <div class="camera-wrap">
       <div class="corner corner-tl"></div><div class="corner corner-tr"></div>
       <div class="corner corner-bl"></div><div class="corner corner-br"></div>
@@ -148,7 +146,7 @@
     <div class="card">
       <div class="card-label">Jestler</div>
       <div class="gesture-list">
-        <div class="gesture-row" id="row-OPEN_HAND"><div class="gesture-left"><div class="gesture-icon">✋</div><span class="gesture-name">Acik el</span></div><span class="gesture-action">Cal / Durdur</span></div>
+        <div class="gesture-row" id="row-OPEN_HAND"><div class="gesture-left"><div class="gesture-icon">✋</div><span class="gesture-name">Acik el</span></div><span class="gesture-action">Cal/Durdur</span></div>
         <div class="gesture-row" id="row-THUMB_UP"><div class="gesture-left"><div class="gesture-icon">🤌</div><span class="gesture-name">Bas+Isaret Acik</span></div><span class="gesture-action">Ses ac</span></div>
         <div class="gesture-row" id="row-THUMB_SIDE"><div class="gesture-left"><div class="gesture-icon">👌</div><span class="gesture-name">Bas+Isaret Kapali</span></div><span class="gesture-action">Ses kis</span></div>
         <div class="gesture-row" id="row-POINT_UP"><div class="gesture-left"><div class="gesture-icon">☝️</div><span class="gesture-name">Isaret parmagi</span></div><span class="gesture-action">Sonraki</span></div>
@@ -164,47 +162,86 @@
   </div>
 </main>
 
-<script src="https://sdk.scdn.co/spotify-player.js"></script>
 <script>
-// YouTube IFrame API
-var tag = document.createElement('script');
-tag.src = "https://www.youtube.com/iframe_api";
-var firstScriptTag = document.getElementsByTagName('script')[0];
-firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-var ytPlayer = null;
+// Global değişkenler
+var ytPlayerObj = null;
+var youtubeMode = false;
+var accessToken = null;
+var currentVolume = 50;
+var nowPlayingInterval = null;
+
+// YouTube IFrame API callback
 function onYouTubeIframeAPIReady() {
   console.log('YouTube IFrame API hazir');
 }
+
+// YouTube fonksiyonları
+function toggleYoutube() {
+  youtubeMode = !youtubeMode;
+  const btn = document.getElementById('ytBtn');
+  const wrap = document.getElementById('ytSearchWrap');
+  if (youtubeMode) {
+    btn.textContent = 'YouTube Aktif';
+    btn.className = 'yt-btn active';
+    wrap.style.display = 'flex';
+  } else {
+    btn.textContent = 'YouTube Modu';
+    btn.className = 'yt-btn';
+    wrap.style.display = 'none';
+    document.getElementById('ytResults').style.display = 'none';
+    document.getElementById('ytPlayerWrap').style.display = 'none';
+    if (ytPlayerObj) { ytPlayerObj.destroy(); ytPlayerObj = null; }
+  }
+}
+
+async function searchYoutube() {
+  const query = document.getElementById('ytInput').value;
+  if (!query) return;
+  const YOUTUBE_API_KEY = 'AIzaSyBIjS4tPrIc7wBIANwEr7SlPnCfJCkFWzk';
+  const res = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&maxResults=5&key=${YOUTUBE_API_KEY}`);
+  const data = await res.json();
+  const results = document.getElementById('ytResults');
+  results.style.display = 'flex';
+  results.innerHTML = data.items.map(item => `
+    <div class="yt-result-item" onclick="playVideo('${item.id.videoId}')">
+      <img class="yt-result-img" src="${item.snippet.thumbnails.default.url}">
+      <span class="yt-result-title">${item.snippet.title}</span>
+    </div>
+  `).join('');
+}
+
+function playVideo(videoId) {
+  document.getElementById('ytResults').style.display = 'none';
+  document.getElementById('ytPlayerWrap').style.display = 'block';
+  if (ytPlayerObj) { ytPlayerObj.destroy(); ytPlayerObj = null; }
+  ytPlayerObj = new YT.Player('ytPlayerDiv', {
+    videoId: videoId,
+    width: '100%',
+    height: '100%',
+    playerVars: { autoplay: 1, controls: 1 },
+    events: { onReady: function(e) { e.target.playVideo(); } }
+  });
+}
 </script>
+
 <script type="module">
 import { FilesetResolver, HandLandmarker } from 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.mjs';
 
 const CLIENT_ID = 'c4b23c55e2144b70be08d462d1608556';
-
-const YOUTUBE_API_KEY = 'AIzaSyBIjS4tPrIc7wBIANwEr7SlPnCfJCkFWzk';
-
-let youtubeMode = false;
-
-
 const REDIRECT_URI = 'https://connectivista.github.io/gesture-control/';
 const SCOPES = 'user-modify-playback-state user-read-playback-state';
 
 const GESTURE_LABELS = { OPEN_HAND:'Acik El', THUMB_UP:'Bas+Isaret Acik', THUMB_SIDE:'Bas+Isaret Kapali', POINT_UP:'Isaret Parmagi', PEACE:'V Isareti' };
-const GESTURE_ACTIONS = { OPEN_HAND:'Cal / Durdur', THUMB_UP:'Ses Ac', THUMB_SIDE:'Ses Kis', POINT_UP:'Sonraki Sarki', PEACE:'Onceki Sarki' };
+const GESTURE_ACTIONS = { OPEN_HAND:'Cal/Durdur', THUMB_UP:'Ses Ac', THUMB_SIDE:'Ses Kis', POINT_UP:'Sonraki Sarki', PEACE:'Onceki Sarki' };
 const THRESHOLDS = { THUMB_UP:6, THUMB_SIDE:6, OPEN_HAND:12, POINT_UP:12, PEACE:12 };
 const COOLDOWNS = { THUMB_UP:800, THUMB_SIDE:800, OPEN_HAND:1500, POINT_UP:1500, PEACE:1500 };
 
-let accessToken = null;
 let handLandmarker = null;
 let running = false;
 let animFrame = null;
 let buffer = [], prevRaw = null, handSide = 'Right';
 let lastGesture = null, lastActionTime = {};
 let logItems = [];
-let currentVolume = 50;
-let nowPlayingInterval = null;
-let player = null;
-let deviceId = null;
 
 const video = document.getElementById('video');
 
@@ -219,65 +256,6 @@ async function generateCodeChallenge(verifier) {
   const enc = new TextEncoder().encode(verifier);
   const hash = await crypto.subtle.digest('SHA-256', enc);
   return btoa(String.fromCharCode(...new Uint8Array(hash))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
-}
-
-
-window.searchYoutube = async function() {
-
-  const query = document.getElementById('ytInput').value;
-
-  if (!query) return;
-
-  const res = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&maxResults=5&key=${YOUTUBE_API_KEY}`);
-
-  const data = await res.json();
-
-  const results = document.getElementById('ytResults');
-
-  results.style.display = 'flex';
-
-  results.innerHTML = data.items.map(item => `
-
-    <div onclick="playVideo('${item.id.videoId}')" style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--surface);border:1px solid var(--border);border-radius:10px;cursor:pointer;">
-
-      <img src="${item.snippet.thumbnails.default.url}" style="width:60px;border-radius:6px;flex-shrink:0;">
-
-      <span style="font-size:12px;color:var(--white);">${item.snippet.title}</span>
-
-    </div>
-
-  `).join('');
-
-}
-
-window.playVideo = function(videoId) {
-
-  document.getElementById('ytResults').style.display = 'none';
-
-  document.getElementById('ytPlayerWrap').style.display = 'block';
-
-  document.getElementById('ytPlayer').src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-
-}
-
-window.toggleYoutube = function() {
-  youtubeMode = !youtubeMode;
-  const btn = document.getElementById('youtubeBtn');
-  const searchBox = document.getElementById('ytSearchBox');
-  if (youtubeMode) {
-    btn.textContent = 'YouTube Aktif';
-    btn.style.background = 'rgba(255,0,0,0.2)';
-    searchBox.style.display = 'flex';
-  } else {
-    btn.textContent = 'YouTube Modu';
-    btn.style.background = 'rgba(255,0,0,0.08)';
-    searchBox.style.display = 'none';
-    document.getElementById('ytResults').style.display = 'none';
-    document.getElementById('ytPlayerWrap').style.display = 'none';
-    document.getElementById('ytPlayer').src = 'about:blank';
-
-  }
-
 }
 
 window.spotifyAuth = async function() {
@@ -309,7 +287,6 @@ async function handleCallback() {
     localStorage.setItem('spotify_token', accessToken);
     window.history.replaceState({}, '', REDIRECT_URI);
     setSpotifyConnected(true);
-    initPlayer();
     startNowPlayingPolling();
   }
 }
@@ -341,31 +318,6 @@ async function spotifyAPI(method, endpoint, body) {
   return null;
 }
 
-function initPlayer() {
-  window.onSpotifyWebPlaybackSDKReady = () => {
-    player = new Spotify.Player({
-      name: 'GestureControl',
-      getOAuthToken: cb => cb(accessToken),
-      volume: 0.5
-    });
-    player.addListener('ready', ({ device_id }) => {
-      deviceId = device_id;
-      console.log('Spotify player hazir, device_id:', device_id);
-    });
-    player.addListener('player_state_changed', state => {
-      if (!state) return;
-      const track = state.track_window.current_track;
-      document.getElementById('nowTitle').textContent = track.name;
-      document.getElementById('nowArtist').textContent = track.artists.map(a=>a.name).join(', ');
-      const art = document.getElementById('nowArt');
-      if (track.album.images[0]) art.src = track.album.images[0].url;
-      document.getElementById('nowState').textContent = state.paused ? '⏸' : '▶';
-      document.getElementById('nowPlaying').classList.add('visible');
-    });
-    player.connect();
-  };
-}
-
 async function startNowPlayingPolling() {
   const update = async () => {
     const data = await spotifyAPI('GET', '/me/player');
@@ -383,30 +335,6 @@ async function startNowPlayingPolling() {
   };
   update();
   nowPlayingInterval = setInterval(update, 3000);
-}
-
-async function execYoutubeAction(gesture) {
-
-  // YouTube klavye kısayolları - sekmeye odaklanmadan çalışmaz
-
-  // Bunun yerine görsel feedback verelim
-
-  const actions = {
-
-    OPEN_HAND: 'YouTube: Cal/Durdur (K)',
-
-    POINT_UP: 'YouTube: Sonraki',
-
-    PEACE: 'YouTube: Onceki',
-
-    THUMB_UP: 'YouTube: Ses Ac (ok yukari)',
-
-    THUMB_SIDE: 'YouTube: Ses Kis (ok asagi)',
-
-  };
-
-  return actions[gesture] || gesture;
-
 }
 
 async function execSpotifyAction(gesture) {
@@ -443,6 +371,31 @@ async function execSpotifyAction(gesture) {
   return GESTURE_ACTIONS[gesture] || gesture;
 }
 
+async function execYoutubeAction(gesture) {
+  const p = window.ytPlayerObj;
+  if (!p || typeof p.getPlayerState !== 'function') return 'YouTube: Video sec';
+  switch(gesture) {
+    case 'OPEN_HAND':
+      if (p.getPlayerState() === 1) { p.pauseVideo(); return 'YouTube: Durduruldu'; }
+      else { p.playVideo(); return 'YouTube: Caliniyor'; }
+    case 'THUMB_UP': {
+      const vol = Math.min(100, p.getVolume() + 10);
+      p.setVolume(vol); return 'YouTube: Ses ' + vol + '%';
+    }
+    case 'THUMB_SIDE': {
+      const vol = Math.max(0, p.getVolume() - 10);
+      p.setVolume(vol); return 'YouTube: Ses ' + vol + '%';
+    }
+    case 'POINT_UP': {
+      p.seekTo(p.getCurrentTime() + 10, true); return 'YouTube: +10sn';
+    }
+    case 'PEACE': {
+      p.seekTo(Math.max(0, p.getCurrentTime() - 10), true); return 'YouTube: -10sn';
+    }
+  }
+  return gesture;
+}
+
 // Gesture recognition
 function fingersUp(lm) {
   const tips = [4,8,12,16,20]; const f = [];
@@ -450,7 +403,7 @@ function fingersUp(lm) {
   for(let i=1;i<5;i++) f.push(lm[tips[i]].y<lm[tips[i]-2].y?1:0);
   return f;
 }
-function isStrictFist(lm) { return [8,12,16,20].every(i=>Math.abs(lm[i].y-lm[0].y)<=0.15); }
+
 function pinchDistance(lm) {
   const dx = lm[4].x - lm[8].x;
   const dy = lm[4].y - lm[8].y;
@@ -468,7 +421,6 @@ function recognize(lm, handedness) {
   else if(f[0]===1&&f[1]===1&&f[2]===0&&f[3]===0&&f[4]===0) {
     raw = pinchDistance(lm) > 0.08 ? 'THUMB_UP' : 'THUMB_SIDE';
   }
-  else if(f.join('')==='00000'&&isStrictFist(lm)) raw='FIST';
   else raw='UNKNOWN';
   if(raw!==prevRaw) buffer=[];
   prevRaw=raw;
@@ -502,9 +454,14 @@ async function handleGesture(gesture) {
   logItems.unshift({action,time});
   if(logItems.length>20) logItems.pop();
   document.getElementById('logList').innerHTML=logItems.map(i=>`<div class="log-item"><span class="log-action">${i.action}</span><span class="log-time">${i.time}</span></div>`).join('');
+  if(gesture==='THUMB_UP'||gesture==='THUMB_SIDE'){
+    document.getElementById('volWrap').style.display='block';
+    document.getElementById('volPct').textContent=currentVolume+'%';
+    document.getElementById('volFill').style.width=currentVolume+'%';
+  }
 }
 
-// Camera & MediaPipe
+// Camera
 async function loadModel() {
   const vision = await FilesetResolver.forVisionTasks('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm');
   handLandmarker = await HandLandmarker.createFromOptions(vision, {
@@ -570,7 +527,7 @@ if(window.location.search.includes('code=')) {
   handleCallback();
 } else {
   const saved = localStorage.getItem('spotify_token');
-  if(saved){ accessToken=saved; setSpotifyConnected(true); initPlayer(); startNowPlayingPolling(); }
+  if(saved){ accessToken=saved; setSpotifyConnected(true); startNowPlayingPolling(); }
 }
 </script>
 </body>
