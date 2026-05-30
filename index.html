@@ -173,6 +173,22 @@
         <button class="yt-search-btn" id="ytSearchBtnEl" onclick="searchYoutube()">Search</button>
       </div>
       <div class="yt-results" id="ytResults"></div>
+      
+      <!-- Playlist URL input -->
+      <div style="display:flex;gap:8px;">
+        <input class="yt-input" id="ytPlaylistUrl" type="text" placeholder="Paste YouTube playlist URL..." style="font-size:12px;">
+        <button class="yt-search-btn" onclick="loadPlaylist()" style="font-size:12px;padding:8px 14px;">Load</button>
+      </div>
+
+      <!-- Playlist -->
+      <div id="ytPlaylist" style="display:none;flex-direction:column;gap:6px;max-height:180px;overflow-y:auto;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+          <span style="font-size:11px;font-weight:600;color:var(--text-secondary);">PLAYLIST</span>
+          <button onclick="clearPlaylist()" style="font-size:11px;color:var(--text-secondary);background:none;border:none;cursor:pointer;">Clear</button>
+        </div>
+        <div id="ytPlaylistItems"></div>
+      </div>
+
       <div class="yt-player-wrap" id="ytPlayerWrap"><div id="ytPlayerDiv" style="width:100%;height:100%;"></div></div>
     </div>
     <div class="media-row">
@@ -235,7 +251,7 @@
 
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
-var ytPlayerObj=null,youtubeMode=false,accessToken=null,currentVolume=50,nowPlayingInterval=null,running=false,currentVideoId=null,relatedVideos=[];
+var ytPlayerObj=null,youtubeMode=false,accessToken=null,currentVolume=50,nowPlayingInterval=null,running=false,currentVideoId=null,relatedVideos=[],playlist=[],playlistIndex=-1;
 var currentLang=localStorage.getItem('lang')||'en';
 function onYouTubeIframeAPIReady(){}
 const LANG={en:{connectSpotify:'Connect Spotify',disconnectSpotify:'Disconnect',youtubeMode:'YouTube Mode',youtubeActive:'YouTube Active',ready:'Ready',cameraActive:'Camera active',startCamera:'Start Camera',stopCamera:'Stop',hideCamera:'👁 Hide Camera',showCamera:'👁 Show Camera',loading:'Loading...',cameraError:'Camera access denied',placeholder:'Click the button below to start',searchPlaceholder:'Search YouTube...',search:'Search',lastCommand:'LAST COMMAND',noGesture:'No gesture yet',gestures:'GESTURES',history:'HISTORY',noCommands:'No commands yet',onbTitle:'Control music with hand gestures',onbDesc:'While cooking, hands busy — look at your camera and gesture.',onbStep1:'Choose Spotify or YouTube',onbStep1sub:'Connect with your Spotify account',onbStep2:'Start the camera',onbStep2sub:'Allow camera access',onbStep3:'Make a gesture',onbStep3sub:'Open hand → Play/Pause | Index finger → Next | V sign → Previous',onbStep4:'Volume control',onbStep4sub:'Thumb + index open → Volume up<br>Thumb + index tips touching → Volume down',onbBtn:'Get Started',openHand:'Open hand',thumbIndexOpen:'Thumb+Index Open',thumbIndexClosed:'Thumb+Index Closed',indexFinger:'Index finger',vSign:'V Sign',playPause:'Play/Pause',volumeUp:'Volume up',volumeDown:'Volume down',next:'Next',previous:'Previous',playing:'Playing',paused:'Paused',nextTrack:'Next Track',prevTrack:'Previous Track',volUp:'Volume Up',volDown:'Volume Down',notConnected:'Spotify not connected',notActive:'Spotify not active',ytPaused:'YouTube: Paused',ytPlaying:'YouTube: Playing',ytSelect:'YouTube: Select a video',ytForward:'YouTube: +10s',ytBackward:'YouTube: -10s',ytVolUp:'YouTube: Volume Up',ytVolDown:'YouTube: Volume Down',about:'About',privacy:'Privacy Policy',volume:'Volume'},tr:{connectSpotify:'Spotify ile Bağlan',disconnectSpotify:'Bağlantıyı Kes',youtubeMode:'YouTube Modu',youtubeActive:'YouTube Aktif',ready:'Hazır',cameraActive:'Kamera aktif',startCamera:'Kamerayı Başlat',stopCamera:'Durdur',hideCamera:'👁 Kamerayı Gizle',showCamera:'👁 Kamerayı Göster',loading:'Yükleniyor...',cameraError:'Kamera erişimi reddedildi',placeholder:'Başlatmak için aşağıdaki butona tıkla',searchPlaceholder:"YouTube'da ara...",search:'Ara',lastCommand:'SON KOMUT',noGesture:'Henüz jest yapılmadı',gestures:'JESTLER',history:'GEÇMİŞ',noCommands:'Henüz komut yok',onbTitle:'El hareketleriyle müzik kontrolü',onbDesc:'Yemek yaparken, eliniz meşgulken — kameranıza bakın ve jest yapın.',onbStep1:'Spotify veya YouTube seçin',onbStep1sub:'Spotify hesabınızla bağlanın',onbStep2:'Kamerayı başlatın',onbStep2sub:'Kamera erişimine izin verin',onbStep3:'Jest yapın',onbStep3sub:'Açık el → Oynat/Durdur | İşaret parmağı → Sonraki | V işareti → Önceki',onbStep4:'Ses kontrolü',onbStep4sub:'Baş + işaret açık → Ses aç<br>Baş + işaret uçları değiyor → Ses kıs',onbBtn:'Başlayalım',openHand:'Açık el',thumbIndexOpen:'Baş+İşaret Açık',thumbIndexClosed:'Baş+İşaret Kapalı',indexFinger:'İşaret parmağı',vSign:'V İşareti',playPause:'Oynat/Durdur',volumeUp:'Ses aç',volumeDown:'Ses kıs',next:'Sonraki',previous:'Önceki',playing:'Çalınıyor',paused:'Durduruldu',nextTrack:'Sonraki Şarkı',prevTrack:'Önceki Şarkı',volUp:'Ses Artırıldı',volDown:'Ses Azaltıldı',notConnected:'Spotify bağlı değil',notActive:'Spotify aktif değil',ytPaused:'YouTube: Durduruldu',ytPlaying:'YouTube: Çalınıyor',ytSelect:'YouTube: Video seç',ytForward:'YouTube: +10sn',ytBackward:'YouTube: -10sn',ytVolUp:'YouTube: Ses Aç',ytVolDown:'YouTube: Ses Kıs',about:'Hakkında',privacy:'Gizlilik Politikası',volume:'Ses'}};
@@ -244,14 +260,84 @@ function setLang(lang){currentLang=lang;localStorage.setItem('lang',lang);const 
 
 function closeOnboarding(){document.getElementById('onboarding').style.display='none';localStorage.setItem('onboarding_seen','1');}
 function toggleYoutube(){youtubeMode=!youtubeMode;const btn=document.getElementById('ytBtn');const col=document.getElementById('youtubeCol');const t=LANG[currentLang];if(youtubeMode){btn.textContent=t.youtubeActive;btn.className='pill-btn pill-btn-green';col.style.display='flex';}else{btn.textContent=t.youtubeMode;btn.className='pill-btn pill-btn-red';col.style.display='none';document.getElementById('ytResults').style.display='none';document.getElementById('ytPlayerWrap').style.display='none';if(ytPlayerObj){ytPlayerObj.destroy();ytPlayerObj=null;}}}
-async function searchYoutube(){const query=document.getElementById('ytInput').value;if(!query)return;const KEY='AIzaSyBIjS4tPrIc7wBIANwEr7SlPnCfJCkFWzk';const res=await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&maxResults=5&key=${KEY}`);const data=await res.json();const results=document.getElementById('ytResults');results.style.display='flex';results.innerHTML=data.items.map(item=>`<div class="yt-result-item" onclick="playVideo('${item.id.videoId}')"><img class="yt-result-img" src="${item.snippet.thumbnails.default.url}"><span class="yt-result-title">${item.snippet.title}</span></div>`).join('');}
-function playVideo(videoId){
+async function searchYoutube(){const query=document.getElementById('ytInput').value;if(!query)return;const KEY='AIzaSyBIjS4tPrIc7wBIANwEr7SlPnCfJCkFWzk';const res=await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&maxResults=5&key=${KEY}`);const data=await res.json();const results=document.getElementById('ytResults');results.style.display='flex';results.innerHTML=data.items.map(item=>`
+    <div class="yt-result-item" style="justify-content:space-between;">
+      <div onclick="playVideo('${item.id.videoId}','${item.snippet.title.replace(/'/g,"\'")}','${item.snippet.thumbnails.default.url}')" style="display:flex;align-items:center;gap:10px;flex:1;cursor:pointer;">
+        <img class="yt-result-img" src="${item.snippet.thumbnails.default.url}">
+        <span class="yt-result-title">${item.snippet.title}</span>
+      </div>
+      <button onclick="addToPlaylist('${item.id.videoId}','${item.snippet.title.replace(/'/g,"\'")}','${item.snippet.thumbnails.default.url}')" 
+              style="background:var(--accent);color:#fff;border:none;border-radius:6px;padding:4px 8px;font-size:11px;cursor:pointer;flex-shrink:0;margin-left:8px;">+</button>
+    </div>
+  `).join('');}
+function playVideo(videoId, title, thumb){
   currentVideoId=videoId;
   document.getElementById('ytResults').style.display='none';
   document.getElementById('ytPlayerWrap').style.display='block';
   if(window.ytPlayerObj){window.ytPlayerObj.destroy();window.ytPlayerObj=null;}
   window.ytPlayerObj=new YT.Player('ytPlayerDiv',{videoId,width:'100%',height:'100%',playerVars:{autoplay:1,controls:1},events:{onReady:(e)=>e.target.playVideo()}});
-  fetchRelatedVideos(videoId);
+  // Playlist index güncelle
+  const idx = playlist.findIndex(v=>v.id===videoId);
+  if(idx>=0) playlistIndex=idx;
+  renderPlaylist();
+}
+
+function addToPlaylist(videoId, title, thumb){
+  if(playlist.find(v=>v.id===videoId)) return;
+  playlist.push({id:videoId, title:title||videoId, thumb:thumb||''});
+  if(playlist.length===1) playlistIndex=0;
+  renderPlaylist();
+}
+
+function renderPlaylist(){
+  const container = document.getElementById('ytPlaylistItems');
+  const wrap = document.getElementById('ytPlaylist');
+  if(playlist.length===0){ wrap.style.display='none'; return; }
+  wrap.style.display='flex';
+  container.innerHTML = playlist.map((v,i)=>`
+    <div onclick="playVideo('${v.id}','${v.title.replace(/'/g,"\'")}','${v.thumb}')" 
+         style="display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;cursor:pointer;background:${i===playlistIndex?'#e8f0fe':'transparent'};transition:background 0.15s;">
+      <img src="${v.thumb}" style="width:48px;height:36px;border-radius:4px;object-fit:cover;flex-shrink:0;">
+      <span style="font-size:11px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;">${v.title}</span>
+      <button onclick="event.stopPropagation();playlist.splice(${i},1);if(playlistIndex>=playlist.length)playlistIndex=playlist.length-1;renderPlaylist();" 
+              style="background:none;border:none;cursor:pointer;color:var(--text-secondary);font-size:14px;flex-shrink:0;">✕</button>
+    </div>
+  `).join('');
+}
+
+function clearPlaylist(){
+  playlist=[];playlistIndex=-1;
+  document.getElementById('ytPlaylist').style.display='none';
+  document.getElementById('ytPlaylistItems').innerHTML='';
+}
+
+async function loadPlaylist(){
+  const url = document.getElementById('ytPlaylistUrl').value;
+  const match = url.match(/[?&]list=([A-Za-z0-9_-]+)/);
+  if(!match){ alert('Invalid playlist URL'); return; }
+  const playlistId = match[1];
+  const YOUTUBE_API_KEY = document.querySelector('[data-ytkey]')?.dataset.ytkey || '';
+  
+  // API key'i bul
+  let apiKey = '';
+  document.querySelectorAll('script').forEach(s=>{
+    const m = s.textContent.match(/key=([A-Za-z0-9_-]{30,})/);
+    if(m) apiKey=m[1];
+  });
+  
+  try {
+    const res = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${playlistId}&key=${apiKey}`);
+    const data = await res.json();
+    if(data.items){
+      data.items.forEach(item=>{
+        const vid = item.snippet.resourceId.videoId;
+        const title = item.snippet.title;
+        const thumb = item.snippet.thumbnails?.default?.url||'';
+        addToPlaylist(vid, title, thumb);
+      });
+      document.getElementById('ytPlaylistUrl').value='';
+    }
+  } catch(e){ alert('Could not load playlist'); }
 }
 async function fetchRelatedVideos(videoId){
   const KEY=document.querySelector('script[src*="googleapis"]') ? '' : '';
@@ -277,14 +363,24 @@ async function spotifyAPI(method,endpoint,body){if(!accessToken)return null;cons
 async function startNowPlayingPolling(){const update=async()=>{const data=await spotifyAPI('GET','/me/player');if(!data||!data.item)return;document.getElementById('nowTitle').textContent=data.item.name;document.getElementById('nowArtist').textContent=data.item.artists.map(a=>a.name).join(', ');const art=document.getElementById('nowArt');if(data.item.album.images[0])art.src=data.item.album.images[0].url;document.getElementById('nowState').textContent=data.is_playing?'▶':'⏸';document.getElementById('nowPlaying').classList.add('visible');currentVolume=data.device?.volume_percent??50;document.getElementById('volWrap').style.display='block';document.getElementById('volPct').textContent=currentVolume+'%';document.getElementById('volFill').style.width=currentVolume+'%';};update();nowPlayingInterval=setInterval(update,3000);}
 async function execSpotifyAction(gesture){const t=LANG[currentLang];if(!accessToken)return t.notConnected;switch(gesture){case'OPEN_HAND':{const state=await spotifyAPI('GET','/me/player');if(!state)return t.notActive;if(state.is_playing){await spotifyAPI('PUT','/me/player/pause');return t.paused;}else{const d=state.device?.id;await spotifyAPI('PUT',d?'/me/player/play?device_id='+d:'/me/player/play');return t.playing;}}case'POINT_UP':await spotifyAPI('POST','/me/player/next');return t.nextTrack;case'PEACE':await spotifyAPI('POST','/me/player/previous');return t.prevTrack;case'THUMB_UP':{const vol=Math.min(100,currentVolume+10);await spotifyAPI('PUT','/me/player/volume?volume_percent='+vol);currentVolume=vol;return t.volUp+': '+vol+'%';}case'THUMB_SIDE':{const vol=Math.max(0,currentVolume-10);await spotifyAPI('PUT','/me/player/volume?volume_percent='+vol);currentVolume=vol;return t.volDown+': '+vol+'%';}}return gesture;}
 async function execYoutubeAction(gesture){const t=LANG[currentLang];const p=window.ytPlayerObj;if(!p||typeof p.getPlayerState!=='function')return t.ytSelect;switch(gesture){case'OPEN_HAND':if(p.getPlayerState()===1){p.pauseVideo();return t.ytPaused;}else{p.playVideo();return t.ytPlaying;}case'THUMB_UP':{const v=Math.min(100,p.getVolume()+10);p.setVolume(v);document.getElementById('volFill').style.width=v+'%';document.getElementById('volPct').textContent=v+'%';document.getElementById('volWrap').style.display='block';return t.ytVolUp+' '+v+'%';}case'THUMB_SIDE':{const v=Math.max(0,p.getVolume()-10);p.setVolume(v);document.getElementById('volFill').style.width=v+'%';document.getElementById('volPct').textContent=v+'%';document.getElementById('volWrap').style.display='block';return t.ytVolDown+' '+v+'%';}case'POINT_UP':
-  if(relatedVideos.length>0){
-    const nextId=relatedVideos.shift();
-    playVideo(nextId);
+  if(playlist.length>0){
+    playlistIndex=(playlistIndex+1)%playlist.length;
+    const next=playlist[playlistIndex];
+    playVideo(next.id,next.title,next.thumb);
     return t.nextTrack||'Next Video';
   } else {
     p.seekTo(p.getCurrentTime()+10,true);
     return t.ytForward;
-  }case'PEACE':p.seekTo(Math.max(0,p.getCurrentTime()-10),true);return t.ytBackward;}return gesture;}
+  }case'PEACE':
+  if(playlist.length>0){
+    playlistIndex=(playlistIndex-1+playlist.length)%playlist.length;
+    const prev=playlist[playlistIndex];
+    playVideo(prev.id,prev.title,prev.thumb);
+    return t.prevTrack||'Previous Video';
+  } else {
+    p.seekTo(Math.max(0,p.getCurrentTime()-10),true);
+    return t.ytBackward;
+  }}return gesture;}
 
 setLang(currentLang);
 if(!localStorage.getItem('onboarding_seen')){document.getElementById('onboarding').style.display='flex';}else{document.getElementById('onboarding').style.display='none';}
