@@ -4,42 +4,47 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>About — GestureControl</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root { --bg: #0a0a0f; --surface: #12121a; --border: rgba(127,119,221,0.15); --purple: #7F77DD; --white: #f0effe; --gray: #6b6a7a; }
-  body { background: var(--bg); color: var(--white); font-family: 'Syne', sans-serif; min-height: 100vh; }
-  header { display: flex; align-items: center; justify-content: space-between; padding: 20px 32px; border-bottom: 1px solid var(--border); }
-  .logo { display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 800; text-decoration: none; color: var(--white); }
-  .logo-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--purple); }
+  :root { --bg: #ffffff; --surface: #f5f5f7; --border: #d2d2d7; --text: #1d1d1f; --text-secondary: #6e6e73; --accent: #0071e3; --green: #34c759; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, sans-serif; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+  header { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 52px; background: rgba(255,255,255,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+  .logo { font-size: 17px; font-weight: 600; letter-spacing: -0.02em; text-decoration: none; color: var(--text); }
   .header-right { display: flex; align-items: center; gap: 10px; }
-  .try-btn { padding: 8px 20px; background: var(--purple); border: none; border-radius: 100px; color: #fff; font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; text-decoration: none; }
-  .lang-switcher { display: flex; border: 1px solid var(--border); border-radius: 100px; overflow: hidden; }
-  .lang-btn { padding: 5px 12px; font-family: 'DM Mono', monospace; font-size: 11px; cursor: pointer; background: transparent; color: var(--gray); border: none; }
-  .lang-btn.active { background: var(--purple); color: #fff; }
-  .hero { max-width: 720px; margin: 80px auto; padding: 0 32px; text-align: center; }
-  .hero h1 { font-size: 48px; font-weight: 800; line-height: 1.1; margin-bottom: 20px; }
-  .hero p { font-family: 'DM Mono', monospace; font-size: 14px; color: var(--gray); line-height: 1.8; margin-bottom: 40px; }
-  .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; max-width: 900px; margin: 60px auto; padding: 0 32px; }
+  .try-btn { padding: 8px 20px; background: var(--text); border: none; border-radius: 100px; color: #fff; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none; }
+  .lang-switcher { display: flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .lang-btn { padding: 5px 10px; font-size: 12px; font-weight: 500; cursor: pointer; background: transparent; color: var(--text-secondary); border: none; font-family: 'Inter', sans-serif; }
+  .lang-btn.active { background: var(--text); color: #fff; }
+  .hero { max-width: 720px; margin: 80px auto; padding: 0 24px; text-align: center; }
+  .hero h1 { font-size: 48px; font-weight: 700; line-height: 1.1; margin-bottom: 20px; letter-spacing: -0.04em; }
+  .hero p { font-size: 17px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 36px; }
+  .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; max-width: 900px; margin: 0 auto 60px; padding: 0 24px; }
   .feature { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 24px; }
   .feature-icon { font-size: 28px; margin-bottom: 12px; }
-  .feature-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
-  .feature-desc { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--gray); line-height: 1.6; }
-  .gestures { max-width: 900px; margin: 0 auto 60px; padding: 0 32px; }
-  .gestures h2 { font-size: 24px; font-weight: 800; margin-bottom: 20px; }
+  .feature-title { font-size: 15px; font-weight: 600; margin-bottom: 8px; letter-spacing: -0.01em; }
+  .feature-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+  .gestures-section { max-width: 900px; margin: 0 auto 80px; padding: 0 24px; }
+  .gestures-section h2 { font-size: 28px; font-weight: 700; margin-bottom: 20px; letter-spacing: -0.03em; }
   .gesture-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
   .gesture-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; text-align: center; }
   .gesture-card .icon { font-size: 24px; margin-bottom: 8px; }
-  .gesture-card .name { font-size: 12px; font-weight: 700; margin-bottom: 4px; }
-  .gesture-card .action { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gray); }
-  footer { text-align: center; padding: 40px 32px; border-top: 1px solid var(--border); font-family: 'DM Mono', monospace; font-size: 12px; color: var(--gray); margin-top: 60px; }
-  footer a { color: var(--purple); text-decoration: none; }
+  .gesture-card .name { font-size: 12px; font-weight: 600; margin-bottom: 4px; }
+  .gesture-card .action { font-size: 11px; color: var(--text-secondary); }
+  footer { text-align: center; padding: 20px 24px; border-top: 1px solid var(--border); font-size: 12px; color: var(--text-secondary); }
+  footer a { color: var(--text-secondary); text-decoration: none; }
+  footer a:hover { color: var(--text); }
+  @media (max-width: 768px) {
+    .hero h1 { font-size: 32px; }
+    .features { grid-template-columns: 1fr; }
+    .gesture-grid { grid-template-columns: repeat(3, 1fr); }
+  }
 </style>
 </head>
 <body>
 <header>
-  <a class="logo" href="https://gesturecontrol.app/"><div class="logo-dot"></div>GestureControl</a>
+  <a class="logo" href="https://gesturecontrol.app/">GestureControl</a>
   <div class="header-right">
     <div class="lang-switcher">
       <button class="lang-btn" id="btnEN" onclick="setLang('en')">EN</button>
@@ -48,17 +53,20 @@
     <a class="try-btn" id="tryBtn" href="https://gesturecontrol.app/">Try it →</a>
   </div>
 </header>
+
 <div class="hero">
   <h1 id="heroTitle">Control music with your hands</h1>
-  <p id="heroDesc">While cooking, working out, or whenever your hands are busy — just look at your camera and gesture.</p>
+  <p id="heroDesc">While cooking, working out, or whenever your hands are busy — just look at your camera and gesture. No touching your phone or keyboard needed.</p>
   <a class="try-btn" id="tryBtn2" href="https://gesturecontrol.app/">Try it Free →</a>
 </div>
+
 <div class="features">
   <div class="feature"><div class="feature-icon">✋</div><div class="feature-title" id="f1title">5 Gestures, Full Control</div><div class="feature-desc" id="f1desc">Open hand, index finger, V sign and more — control your music exactly how you want.</div></div>
   <div class="feature"><div class="feature-icon">🔒</div><div class="feature-title" id="f2title">Privacy First</div><div class="feature-desc" id="f2desc">Your camera feed never leaves your browser. All processing happens locally on your device.</div></div>
   <div class="feature"><div class="feature-icon">🎵</div><div class="feature-title" id="f3title">YouTube Support</div><div class="feature-desc" id="f3desc">Control YouTube videos with gestures. Spotify support coming soon.</div></div>
 </div>
-<div class="gestures">
+
+<div class="gestures-section">
   <h2 id="gesturesTitle">Gestures</h2>
   <div class="gesture-grid">
     <div class="gesture-card"><div class="icon">✋</div><div class="name" id="g1name">Open Hand</div><div class="action" id="g1action">Play / Pause</div></div>
@@ -68,22 +76,15 @@
     <div class="gesture-card"><div class="icon">👌</div><div class="name" id="g5name">Thumb+Index Closed</div><div class="action" id="g5action">Volume Down</div></div>
   </div>
 </div>
+
 <footer>
   <p>© 2026 GestureControl &nbsp;·&nbsp; <a id="footerAbout" href="https://gesturecontrol.app/about.html">About</a> &nbsp;·&nbsp; <a id="footerPrivacy" href="https://gesturecontrol.app/privacy.html">Privacy Policy</a></p>
 </footer>
+
 <script>
-const T = {
-  en: { tryBtn:'Try it →', tryBtn2:'Try it Free →', heroTitle:'Control music with your hands', heroDesc:'While cooking, working out, or whenever your hands are busy — just look at your camera and gesture.', f1title:'5 Gestures, Full Control', f1desc:'Open hand, index finger, V sign and more — control your music exactly how you want.', f2title:'Privacy First', f2desc:'Your camera feed never leaves your browser. All processing happens locally on your device.', f3title:'YouTube Support', f3desc:'Control YouTube videos with gestures. Spotify support coming soon.', gesturesTitle:'Gestures', g1name:'Open Hand', g1action:'Play / Pause', g2name:'Index Finger', g2action:'Next Track', g3name:'V Sign', g3action:'Previous Track', g4name:'Thumb+Index Open', g4action:'Volume Up', g5name:'Thumb+Index Closed', g5action:'Volume Down', footerAbout:'About', footerPrivacy:'Privacy Policy' },
-  tr: { tryBtn:'Dene →', tryBtn2:'Ücretsiz Dene →', heroTitle:'Müziği ellerinizle kontrol edin', heroDesc:'Yemek yaparken, spor yaparken ya da elleriniz meşgulken — kameranıza bakın ve jest yapın.', f1title:'5 Jest, Tam Kontrol', f1desc:'Açık el, işaret parmağı, V işareti ve daha fazlası — müziğinizi tam istediğiniz gibi kontrol edin.', f2title:'Gizlilik Önce Gelir', f2desc:'Kamera görüntünüz tarayıcınızı terk etmez. Tüm işlemler cihazınızda yerel olarak gerçekleşir.', f3title:'YouTube Desteği', f3desc:'YouTube videolarını jestlerle kontrol edin. Spotify desteği yakında geliyor.', gesturesTitle:'Jestler', g1name:'Açık El', g1action:'Oynat / Durdur', g2name:'İşaret Parmağı', g2action:'Sonraki Şarkı', g3name:'V İşareti', g3action:'Önceki Şarkı', g4name:'Baş+İşaret Açık', g4action:'Ses Aç', g5name:'Baş+İşaret Kapalı', g5action:'Ses Kıs', footerAbout:'Hakkında', footerPrivacy:'Gizlilik Politikası' }
-};
-function setLang(lang) {
-  localStorage.setItem('lang', lang);
-  document.getElementById('htmlRoot').lang = lang;
-  document.getElementById('btnEN').className = 'lang-btn' + (lang==='en' ? ' active' : '');
-  document.getElementById('btnTR').className = 'lang-btn' + (lang==='tr' ? ' active' : '');
-  Object.keys(T[lang]).forEach(k => { const el = document.getElementById(k); if(el) el.textContent = T[lang][k]; });
-}
-setLang(localStorage.getItem('lang') || 'en');
+const T={en:{tryBtn:'Try it →',tryBtn2:'Try it Free →',heroTitle:'Control music with your hands',heroDesc:'While cooking, working out, or whenever your hands are busy — just look at your camera and gesture.',f1title:'5 Gestures, Full Control',f1desc:'Open hand, index finger, V sign and more — control your music exactly how you want.',f2title:'Privacy First',f2desc:'Your camera feed never leaves your browser. All processing happens locally on your device.',f3title:'YouTube Support',f3desc:'Control YouTube videos with gestures. Spotify support coming soon.',gesturesTitle:'Gestures',g1name:'Open Hand',g1action:'Play / Pause',g2name:'Index Finger',g2action:'Next Track',g3name:'V Sign',g3action:'Previous Track',g4name:'Thumb+Index Open',g4action:'Volume Up',g5name:'Thumb+Index Closed',g5action:'Volume Down',footerAbout:'About',footerPrivacy:'Privacy Policy'},tr:{tryBtn:'Dene →',tryBtn2:'Ücretsiz Dene →',heroTitle:'Müziği ellerinizle kontrol edin',heroDesc:'Yemek yaparken, spor yaparken ya da elleriniz meşgulken — kameranıza bakın ve jest yapın.',f1title:'5 Jest, Tam Kontrol',f1desc:'Açık el, işaret parmağı, V işareti ve daha fazlası — müziğinizi tam istediğiniz gibi kontrol edin.',f2title:'Gizlilik Önce Gelir',f2desc:'Kamera görüntünüz tarayıcınızı terk etmez. Tüm işlemler cihazınızda yerel olarak gerçekleşir.',f3title:'YouTube Desteği',f3desc:'YouTube videolarını jestlerle kontrol edin. Spotify desteği yakında geliyor.',gesturesTitle:'Jestler',g1name:'Açık El',g1action:'Oynat / Durdur',g2name:'İşaret Parmağı',g2action:'Sonraki Şarkı',g3name:'V İşareti',g3action:'Önceki Şarkı',g4name:'Baş+İşaret Açık',g4action:'Ses Aç',g5name:'Baş+İşaret Kapalı',g5action:'Ses Kıs',footerAbout:'Hakkında',footerPrivacy:'Gizlilik Politikası'}};
+function setLang(lang){localStorage.setItem('lang',lang);document.getElementById('htmlRoot').lang=lang;document.getElementById('btnEN').className='lang-btn'+(lang==='en'?' active':'');document.getElementById('btnTR').className='lang-btn'+(lang==='tr'?' active':'');Object.keys(T[lang]).forEach(k=>{const el=document.getElementById(k);if(el)el.textContent=T[lang][k];});}
+setLang(localStorage.getItem('lang')||'en');
 </script>
 </body>
 </html>
