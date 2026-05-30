@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hakkında — GestureControl</title>
+<title>About — GestureControl</title>
+<meta name="description" content="Control your music with hand gestures. No touch needed — just wave your hand at your camera.">
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <style>
@@ -22,6 +23,13 @@
   .feature-icon { font-size: 28px; margin-bottom: 12px; }
   .feature-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
   .feature-desc { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--gray); line-height: 1.6; }
+  .gestures { max-width: 900px; margin: 0 auto 60px; padding: 0 32px; }
+  .gestures h2 { font-size: 24px; font-weight: 800; margin-bottom: 20px; }
+  .gesture-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+  .gesture-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; text-align: center; }
+  .gesture-card .icon { font-size: 24px; margin-bottom: 8px; }
+  .gesture-card .name { font-size: 12px; font-weight: 700; margin-bottom: 4px; }
+  .gesture-card .action { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gray); }
   footer { text-align: center; padding: 40px 32px; border-top: 1px solid var(--border); font-family: 'DM Mono', monospace; font-size: 12px; color: var(--gray); margin-top: 60px; }
   footer a { color: var(--purple); text-decoration: none; }
 </style>
@@ -29,35 +37,46 @@
 <body>
 <header>
   <a class="logo" href="/gesture-control/"><div class="logo-dot"></div>GestureControl</a>
-  <a class="try-btn" href="/gesture-control/">Dene →</a>
+  <a class="try-btn" href="/gesture-control/">Try it →</a>
 </header>
 
 <div class="hero">
-  <h1>El hareketleriyle müzik kontrolü</h1>
-  <p>Yemek yaparken, eliniz meşgulken — kameranıza bakın ve jest yapın. Telefona dokunmadan, klavyeye basmadan müziğinizi kontrol edin.</p>
-  <a class="try-btn" href="/gesture-control/">Hemen Dene →</a>
+  <h1>Control music with your hands</h1>
+  <p>While cooking, working out, or whenever your hands are busy — just look at your camera and gesture. No touching your phone or keyboard needed.</p>
+  <a class="try-btn" href="/gesture-control/">Try it Free →</a>
 </div>
 
 <div class="features">
   <div class="feature">
     <div class="feature-icon">✋</div>
-    <div class="feature-title">5 Jest, Sonsuz Kontrol</div>
-    <div class="feature-desc">Açık el, işaret parmağı, V işareti ve daha fazlasıyla müziğinizi tam olarak kontrol edin.</div>
+    <div class="feature-title">5 Gestures, Full Control</div>
+    <div class="feature-desc">Open hand, index finger, V sign and more — control your music exactly how you want.</div>
   </div>
   <div class="feature">
     <div class="feature-icon">🔒</div>
-    <div class="feature-title">Gizliliğiniz Güvende</div>
-    <div class="feature-desc">Kamera görüntünüz hiçbir sunucuya gönderilmez. Tüm işlemler tarayıcınızda gerçekleşir.</div>
+    <div class="feature-title">Privacy First</div>
+    <div class="feature-desc">Your camera feed never leaves your browser. All processing happens locally on your device.</div>
   </div>
   <div class="feature">
     <div class="feature-icon">🎵</div>
-    <div class="feature-title">YouTube Desteği</div>
-    <div class="feature-desc">YouTube videolarını jest ile kontrol edin. Spotify desteği yakında geliyor.</div>
+    <div class="feature-title">YouTube Support</div>
+    <div class="feature-desc">Control YouTube videos with gestures. Spotify support coming soon.</div>
+  </div>
+</div>
+
+<div class="gestures">
+  <h2>Gestures</h2>
+  <div class="gesture-grid">
+    <div class="gesture-card"><div class="icon">✋</div><div class="name">Open Hand</div><div class="action">Play / Pause</div></div>
+    <div class="gesture-card"><div class="icon">☝️</div><div class="name">Index Finger</div><div class="action">Next Track</div></div>
+    <div class="gesture-card"><div class="icon">✌️</div><div class="name">V Sign</div><div class="action">Previous Track</div></div>
+    <div class="gesture-card"><div class="icon">🤌</div><div class="name">Thumb+Index Open</div><div class="action">Volume Up</div></div>
+    <div class="gesture-card"><div class="icon">👌</div><div class="name">Thumb+Index Closed</div><div class="action">Volume Down</div></div>
   </div>
 </div>
 
 <footer>
-  <p>© 2026 GestureControl &nbsp;·&nbsp; <a href="/gesture-control/privacy.html">Gizlilik Politikası</a> &nbsp;·&nbsp; <a href="/gesture-control/about.html">Hakkında</a></p>
+  <p>© 2026 GestureControl &nbsp;·&nbsp; <a href="/gesture-control/about.html">About</a> &nbsp;·&nbsp; <a href="/gesture-control/privacy.html">Privacy Policy</a></p>
 </footer>
 </body>
 </html>

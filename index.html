@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -115,40 +115,40 @@
 <div class="onboarding" id="onboarding">
   <div class="onboarding-card">
     <div class="onboarding-logo"><div class="onboarding-logo-dot"></div>GestureControl</div>
-    <div class="onboarding-title">El hareketleriyle müzik kontrolü</div>
-    <div class="onboarding-desc">Yemek yaparken, eliniz meşgulken — kameranıza bakın ve jest yapın.</div>
+    <div class="onboarding-title">Control music with hand gestures</div>
+    <div class="onboarding-desc">While cooking, hands busy — look at your camera and gesture.</div>
     <div class="onboarding-steps">
       <div class="onboarding-step">
         <div class="onboarding-step-num">1</div>
         <div>
-          <div class="onboarding-step-text">Spotify veya YouTube seçin</div>
-          <div class="onboarding-step-sub">Spotify için hesabınızla bağlanın</div>
+          <div class="onboarding-step-text">Choose Spotify or YouTube</div>
+          <div class="onboarding-step-sub">Connect with your Spotify account</div>
         </div>
       </div>
       <div class="onboarding-step">
         <div class="onboarding-step-num">2</div>
         <div>
-          <div class="onboarding-step-text">Kamerayı başlatın</div>
-          <div class="onboarding-step-sub">Kamera erişimine izin verin</div>
+          <div class="onboarding-step-text">Start the camera</div>
+          <div class="onboarding-step-sub">Allow camera access</div>
         </div>
       </div>
       <div class="onboarding-step">
         <div class="onboarding-step-num">3</div>
         <div>
-          <div class="onboarding-step-text">Jest yapın</div>
-          <div class="onboarding-step-sub">✋ Çal/Durdur &nbsp;☝️ Sonraki &nbsp;✌️ Önceki</div>
+          <div class="onboarding-step-text">Make a gesture</div>
+          <div class="onboarding-step-sub">✋ Çal/Stop &nbsp;☝️ Next &nbsp;✌️ Previous</div>
         </div>
       </div>
     </div>
       <div class="onboarding-step">
         <div class="onboarding-step-num">4</div>
         <div>
-          <div class="onboarding-step-text">Ses kontrolü</div>
-          <div class="onboarding-step-sub">Baş + işaret parmağı açık → Ses aç<br>Baş + işaret parmağı uçları birbirine değiyor → Ses kıs</div>
+          <div class="onboarding-step-text">Volume control</div>
+          <div class="onboarding-step-sub">Baş + işaret parmağı açık → Volume up<br>Thumb + index finger tips touching → Volume down</div>
         </div>
       </div>
     </div>
-    <button class="onboarding-btn" onclick="closeOnboarding()">Başlayalım →</button>
+    <button class="onboarding-btn" onclick="closeOnboarding()">Get Started →</button>
   </div>
 </div>
 
@@ -156,11 +156,11 @@
   <div class="logo"><div class="logo-dot"></div>GestureControl</div>
   <div class="header-right">
     <div style="position:relative; display:inline-flex;">
-      <button class="spotify-btn" id="spotifyBtn" onclick="spotifyAuth()" style="opacity:0.35; pointer-events:none;">Spotify ile Bağlan</button>
+      <button class="spotify-btn" id="spotifyBtn" onclick="spotifyAuth()" style="opacity:0.35; pointer-events:none;">Connect Spotify</button>
       <span style="position:absolute; top:-8px; right:-8px; background:#7F77DD; color:#fff; font-family:'DM Mono',monospace; font-size:9px; padding:2px 6px; border-radius:100px; white-space:nowrap;">Coming Soon</span>
     </div>
-    <button class="yt-btn" id="ytBtn" onclick="toggleYoutube()">YouTube Modu</button>
-    <div class="status-pill" id="statusPill"><div class="status-dot"></div><span id="statusText">Hazır</span></div>
+    <button class="yt-btn" id="ytBtn" onclick="toggleYoutube()">YouTube Mode</button>
+    <div class="status-pill" id="statusPill"><div class="status-dot"></div><span id="statusText">Ready</span></div>
   </div>
 </header>
 <main>
@@ -170,12 +170,12 @@
       <div class="youtube-col" id="youtubeCol" style="display:none;">
         <div class="yt-search-wrap" id="ytSearchWrap">
           <div class="yt-search-row">
-            <input class="yt-input" id="ytInput" type="text" placeholder="YouTube'da ara..." onkeydown="if(event.key==='Enter') searchYoutube()">
-            <button class="yt-search-btn" onclick="searchYoutube()">Ara</button>
+            <input class="yt-input" id="ytInput" type="text" placeholder="Search YouTube..." onkeydown="if(event.key==='Enter') searchYoutube()">
+            <button class="yt-search-btn" onclick="searchYoutube()">Search</button>
           </div>
           <div class="yt-results" id="ytResults"></div>
           <div style="display:flex; justify-content:flex-end; margin-bottom:6px;" id="ytControls" style="display:none;">
-            <button onclick="toggleCinema()" id="cinemaBtn" style="padding:5px 12px; background:var(--surface); border:1px solid var(--border); border-radius:8px; color:var(--gray); font-family:'DM Mono',monospace; font-size:11px; cursor:pointer;">🎬 Sinema Modu</button>
+            <button onclick="toggleCinema()" id="cinemaBtn" style="padding:5px 12px; background:var(--surface); border:1px solid var(--border); border-radius:8px; color:var(--gray); font-family:'DM Mono',monospace; font-size:11px; cursor:pointer;">🎬 Cinema Mode</button>
           </div>
           <div class="yt-player-wrap" id="ytPlayerWrap" style="display:none; aspect-ratio:16/9;">
             <div id="ytPlayerDiv" style="width:100%;height:100%;"></div>
@@ -185,14 +185,14 @@
       <!-- Camera Col -->
       <div class="camera-col visible" id="cameraCol">
         <button class="camera-toggle-btn" onclick="toggleCameraView()" id="cameraToggleBtn">
-          👁 Kamerayı Gizle
+          👁 Hide Camera
         </button>
         <div class="camera-wrap" id="cameraWrap">
       <div class="corner corner-tl"></div><div class="corner corner-tr"></div>
       <div class="corner corner-bl"></div><div class="corner corner-br"></div>
       <div class="camera-placeholder" id="placeholder">
         <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
-        <p>Başlatmak için aşağıdaki butona tıkla</p>
+        <p>Click the button below to start</p>
       </div>
       <div class="now-playing" id="nowPlaying">
         <img class="now-playing-art" id="nowArt" src="" alt="">
@@ -208,14 +208,14 @@
         <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
       </div>
         </div>
-        <button class="start-btn" id="startBtn" onclick="toggleCamera()">Kamerayı Başlat</button>
+        <button class="start-btn" id="startBtn" onclick="toggleCamera()">Start Camera</button>
       </div>
     </div>
   <div class="sidebar">
     <div class="card">
       <div class="card-label">Son komut</div>
       <div class="last-command-value" id="lastCommand">—</div>
-      <div class="last-command-sub" id="lastGesture">Henüz jest yapılmadı</div>
+      <div class="last-command-sub" id="lastGesture">No gesture yet</div>
       <div class="vol-bar-wrap" id="volWrap" style="display:none">
         <div class="vol-label"><span>Ses</span><span id="volPct">—</span></div>
         <div class="vol-bar"><div class="vol-fill" id="volFill" style="width:0%"></div></div>
@@ -224,17 +224,17 @@
     <div class="card">
       <div class="card-label">Jestler</div>
       <div class="gesture-list">
-        <div class="gesture-row" id="row-OPEN_HAND"><div class="gesture-left"><div class="gesture-icon">✋</div><span class="gesture-name">Açık el</span></div><span class="gesture-action">Çal/Durdur</span></div>
-        <div class="gesture-row" id="row-THUMB_UP"><div class="gesture-left"><div class="gesture-icon">🤌</div><span class="gesture-name">Baş+İşaret Açık</span></div><span class="gesture-action">Ses aç</span></div>
-        <div class="gesture-row" id="row-THUMB_SIDE"><div class="gesture-left"><div class="gesture-icon">👌</div><span class="gesture-name">Baş+İşaret Kapalı</span></div><span class="gesture-action">Ses kıs</span></div>
-        <div class="gesture-row" id="row-POINT_UP"><div class="gesture-left"><div class="gesture-icon">☝️</div><span class="gesture-name">İşaret parmağı</span></div><span class="gesture-action">Sonraki</span></div>
-        <div class="gesture-row" id="row-PEACE"><div class="gesture-left"><div class="gesture-icon">✌️</div><span class="gesture-name">V İşareti</span></div><span class="gesture-action">Önceki</span></div>
+        <div class="gesture-row" id="row-OPEN_HAND"><div class="gesture-left"><div class="gesture-icon">✋</div><span class="gesture-name">Open hand</span></div><span class="gesture-action">Çal/Stop</span></div>
+        <div class="gesture-row" id="row-THUMB_UP"><div class="gesture-left"><div class="gesture-icon">🤌</div><span class="gesture-name">Thumb+Index Open</span></div><span class="gesture-action">Volume up</span></div>
+        <div class="gesture-row" id="row-THUMB_SIDE"><div class="gesture-left"><div class="gesture-icon">👌</div><span class="gesture-name">Thumb+Index Closed</span></div><span class="gesture-action">Volume down</span></div>
+        <div class="gesture-row" id="row-POINT_UP"><div class="gesture-left"><div class="gesture-icon">☝️</div><span class="gesture-name">Index finger</span></div><span class="gesture-action">Next</span></div>
+        <div class="gesture-row" id="row-PEACE"><div class="gesture-left"><div class="gesture-icon">✌️</div><span class="gesture-name">V Sign</span></div><span class="gesture-action">Previous</span></div>
       </div>
     </div>
     <div class="card">
       <div class="card-label">Geçmiş</div>
       <div class="log-list" id="logList">
-        <div class="log-item"><span class="log-action" style="color:var(--gray)">Henüz komut yok</span></div>
+        <div class="log-item"><span class="log-action" style="color:var(--gray)">No commands yet</span></div>
       </div>
     </div>
   </div>
@@ -264,12 +264,12 @@ function toggleYoutube() {
   const btn = document.getElementById('ytBtn');
   const col = document.getElementById('youtubeCol');
   if (youtubeMode) {
-    btn.textContent = 'YouTube Aktif';
+    btn.textContent = 'YouTube Active';
     btn.className = 'yt-btn active';
     col.style.display = 'flex';
     document.getElementById('ytSearchWrap').style.display = 'flex';
   } else {
-    btn.textContent = 'YouTube Modu';
+    btn.textContent = 'YouTube Mode';
     btn.className = 'yt-btn';
     col.style.display = 'none';
     document.getElementById('ytResults').style.display = 'none';
@@ -285,10 +285,10 @@ function toggleCinema() {
   const btn = document.getElementById('cinemaBtn');
   if (cinemaMode) {
     wrap.classList.add('cinema');
-    btn.textContent = '✕ Normal Mod';
+    btn.textContent = '✕ Exit Cinema';
   } else {
     wrap.classList.remove('cinema');
-    btn.textContent = '🎬 Sinema Modu';
+    btn.textContent = '🎬 Cinema Mode';
   }
   if (ytPlayerObj) ytPlayerObj.setSize('100%', wrap.offsetHeight);
 }
@@ -299,10 +299,10 @@ function toggleCameraView() {
   const isHidden = wrap.style.display === 'none';
   if (isHidden) {
     wrap.style.display = 'block';
-    btn.textContent = '👁 Kamerayı Gizle';
+    btn.textContent = '👁 Hide Camera';
   } else {
     wrap.style.display = 'none';
-    btn.textContent = '👁 Kamerayı Göster';
+    btn.textContent = '👁 Show Camera';
   }
 }
 
@@ -344,8 +344,8 @@ const CLIENT_ID = 'c4b23c55e2144b70be08d462d1608556';
 const REDIRECT_URI = 'https://connectivista.github.io/gesture-control/';
 const SCOPES = 'user-modify-playback-state user-read-playback-state';
 
-const GESTURE_LABELS = { OPEN_HAND:'Açık El', THUMB_UP:'Baş+İşaret Açık', THUMB_SIDE:'Baş+İşaret Kapalı', POINT_UP:'İşaret Parmağı', PEACE:'V İşareti' };
-const GESTURE_ACTIONS = { OPEN_HAND:'Çal/Durdur', THUMB_UP:'Ses Aç', THUMB_SIDE:'Ses Kıs', POINT_UP:'Sonraki Şarkı', PEACE:'Önceki Şarkı' };
+const GESTURE_LABELS = { OPEN_HAND:'Open Hand', THUMB_UP:'Thumb+Index Open', THUMB_SIDE:'Thumb+Index Closed', POINT_UP:'Index Finger', PEACE:'V Sign' };
+const GESTURE_ACTIONS = { OPEN_HAND:'Çal/Stop', THUMB_UP:'Volume Up', THUMB_SIDE:'Volume Down', POINT_UP:'Next Şarkı', PEACE:'Previous Şarkı' };
 const THRESHOLDS = { THUMB_UP:6, THUMB_SIDE:6, OPEN_HAND:12, POINT_UP:12, PEACE:12 };
 const COOLDOWNS = { THUMB_UP:800, THUMB_SIDE:800, OPEN_HAND:1500, POINT_UP:1500, PEACE:1500 };
 
@@ -414,7 +414,7 @@ function disconnectSpotify() {
 
 function setSpotifyConnected(connected) {
   const btn = document.getElementById('spotifyBtn');
-  btn.textContent = connected ? 'Bağlı — Çıkış' : 'Spotify ile Bağlan';
+  btn.textContent = connected ? 'Connected — Disconnect' : 'Connect Spotify';
   btn.className = 'spotify-btn' + (connected ? ' connected' : '');
 }
 
@@ -451,23 +451,23 @@ async function startNowPlayingPolling() {
 }
 
 async function execSpotifyAction(gesture) {
-  if (!accessToken) return 'Spotify bağlı değil';
+  if (!accessToken) return 'Spotify not connected';
   switch(gesture) {
     case 'OPEN_HAND': {
       const state = await spotifyAPI('GET', '/me/player');
-      if (!state) return 'Spotify aktif değil';
+      if (!state) return 'Spotify not active';
       if (state.is_playing) {
         await spotifyAPI('PUT', '/me/player/pause');
-        return 'Durduruldu';
+        return 'Stopuldu';
       } else {
         const deviceId = state.device?.id;
         const url = deviceId ? '/me/player/play?device_id=' + deviceId : '/me/player/play';
         await spotifyAPI('PUT', url);
-        return 'Çalınıyor';
+        return 'Playing';
       }
     }
-    case 'POINT_UP': await spotifyAPI('POST', '/me/player/next'); return 'Sonraki Şarkı';
-    case 'PEACE': await spotifyAPI('POST', '/me/player/previous'); return 'Önceki Şarkı';
+    case 'POINT_UP': await spotifyAPI('POST', '/me/player/next'); return 'Next Şarkı';
+    case 'PEACE': await spotifyAPI('POST', '/me/player/previous'); return 'Previous Şarkı';
     case 'THUMB_UP': {
       const vol = Math.min(100, currentVolume + 10);
       await spotifyAPI('PUT', '/me/player/volume?volume_percent=' + vol);
@@ -486,11 +486,11 @@ async function execSpotifyAction(gesture) {
 
 async function execYoutubeAction(gesture) {
   const p = window.ytPlayerObj;
-  if (!p || typeof p.getPlayerState !== 'function') return 'YouTube: Video seç';
+  if (!p || typeof p.getPlayerState !== 'function') return 'YouTube: Select a video';
   switch(gesture) {
     case 'OPEN_HAND':
-      if (p.getPlayerState() === 1) { p.pauseVideo(); return 'YouTube: Durduruldu'; }
-      else { p.playVideo(); return 'YouTube: Çalınıyor'; }
+      if (p.getPlayerState() === 1) { p.pauseVideo(); return 'YouTube: Stopuldu'; }
+      else { p.playVideo(); return 'YouTube: Playing'; }
     case 'THUMB_UP': {
       const vol = Math.min(100, p.getVolume() + 10);
       p.setVolume(vol); return 'YouTube: Ses ' + vol + '%';
@@ -500,10 +500,10 @@ async function execYoutubeAction(gesture) {
       p.setVolume(vol); return 'YouTube: Ses ' + vol + '%';
     }
     case 'POINT_UP': {
-      p.seekTo(p.getCurrentTime() + 10, true); return 'YouTube: +10sn';
+      p.seekTo(p.getCurrentTime() + 10, true); return 'YouTube: +10s';
     }
     case 'PEACE': {
-      p.seekTo(Math.max(0, p.getCurrentTime() - 10), true); return 'YouTube: -10sn';
+      p.seekTo(Math.max(0, p.getCurrentTime() - 10), true); return 'YouTube: -10s';
     }
   }
   return gesture;
@@ -605,11 +605,11 @@ window.toggleCamera = async function() {
     video.srcObject?.getTracks().forEach(t=>t.stop());
     video.style.display='none';
     document.getElementById('placeholder').style.display='flex';
-    btn.textContent='Kamerayı Başlat';
+    btn.textContent='Start Camera';
     btn.classList.remove('running');
     setStatus(false); return;
   }
-  btn.textContent='Yükleniyor...'; btn.disabled=true;
+  btn.textContent='Loading...'; btn.disabled=true;
   try {
     if(!handLandmarker) await loadModel();
     const stream = await navigator.mediaDevices.getUserMedia({video: true});
@@ -619,12 +619,12 @@ window.toggleCamera = async function() {
     video.style.display='block';
     document.getElementById('placeholder').style.display='none';
     running=true; setStatus(true);
-    btn.textContent='Durdur';
+    btn.textContent='Stop';
     btn.classList.add('running'); btn.disabled=false;
     detect();
   } catch(e){
     console.error('Kamera hatasi:', e);
-    btn.textContent='Kamera erişimi reddedildi';
+    btn.textContent='Camera access denied';
     btn.disabled=false;
   }
 }
@@ -632,7 +632,7 @@ window.toggleCamera = async function() {
 function setStatus(active) {
   const pill=document.getElementById('statusPill');
   pill.className='status-pill'+(active?' active':'');
-  document.getElementById('statusText').textContent=active?'Kamera aktif':'Hazır';
+  document.getElementById('statusText').textContent=active?'Camera active':'Ready';
 }
 
 // Init
@@ -650,7 +650,7 @@ if(window.location.search.includes('code=')) {
 }
 </script>
 <footer style="text-align:center; padding:24px 32px; border-top:1px solid rgba(127,119,221,0.15); font-family:'DM Mono',monospace; font-size:12px; color:#6b6a7a; margin-top:40px; position:relative; z-index:10;">
-  © 2026 GestureControl &nbsp;·&nbsp; <a href="/gesture-control/about.html" style="color:#7F77DD; text-decoration:none;">Hakkında</a> &nbsp;·&nbsp; <a href="/gesture-control/privacy.html" style="color:#7F77DD; text-decoration:none;">Gizlilik Politikası</a>
+  © 2026 GestureControl &nbsp;·&nbsp; <a href="/gesture-control/about.html" style="color:#7F77DD; text-decoration:none;">About</a> &nbsp;·&nbsp; <a href="/gesture-control/privacy.html" style="color:#7F77DD; text-decoration:none;">Privacy Policy</a>
 </footer>
 </body>
 </html>
