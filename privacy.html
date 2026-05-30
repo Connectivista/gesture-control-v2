@@ -4,30 +4,30 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Privacy Policy — GestureControl</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root { --bg: #0a0a0f; --surface: #12121a; --border: rgba(127,119,221,0.15); --purple: #7F77DD; --white: #f0effe; --gray: #6b6a7a; }
-  body { background: var(--bg); color: var(--white); font-family: 'Syne', sans-serif; min-height: 100vh; }
-  header { display: flex; align-items: center; justify-content: space-between; padding: 20px 32px; border-bottom: 1px solid var(--border); }
-  .logo { display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 800; text-decoration: none; color: var(--white); }
-  .logo-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--purple); }
-  .lang-switcher { display: flex; border: 1px solid var(--border); border-radius: 100px; overflow: hidden; }
-  .lang-btn { padding: 5px 12px; font-family: 'DM Mono', monospace; font-size: 11px; cursor: pointer; background: transparent; color: var(--gray); border: none; }
-  .lang-btn.active { background: var(--purple); color: #fff; }
-  .content { max-width: 720px; margin: 60px auto; padding: 0 32px; }
-  h1 { font-size: 32px; font-weight: 800; margin-bottom: 8px; }
-  .date { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--gray); margin-bottom: 48px; }
-  h2 { font-size: 18px; font-weight: 700; margin: 32px 0 12px; }
-  p { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--gray); line-height: 1.8; margin-bottom: 16px; }
-  footer { text-align: center; padding: 40px 32px; border-top: 1px solid var(--border); font-family: 'DM Mono', monospace; font-size: 12px; color: var(--gray); margin-top: 60px; }
-  footer a { color: var(--purple); text-decoration: none; }
+  :root { --bg: #ffffff; --surface: #f5f5f7; --border: #d2d2d7; --text: #1d1d1f; --text-secondary: #6e6e73; --accent: #0071e3; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, sans-serif; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+  header { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 52px; background: rgba(255,255,255,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+  .logo { font-size: 17px; font-weight: 600; letter-spacing: -0.02em; text-decoration: none; color: var(--text); }
+  .lang-switcher { display: flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .lang-btn { padding: 5px 10px; font-size: 12px; font-weight: 500; cursor: pointer; background: transparent; color: var(--text-secondary); border: none; font-family: 'Inter', sans-serif; }
+  .lang-btn.active { background: var(--text); color: #fff; }
+  .content { max-width: 680px; margin: 60px auto; padding: 0 24px 60px; }
+  h1 { font-size: 32px; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 8px; }
+  .date { font-size: 13px; color: var(--text-secondary); margin-bottom: 48px; }
+  h2 { font-size: 17px; font-weight: 600; margin: 32px 0 10px; letter-spacing: -0.01em; }
+  p { font-size: 14px; color: var(--text-secondary); line-height: 1.8; margin-bottom: 16px; }
+  footer { text-align: center; padding: 20px 24px; border-top: 1px solid var(--border); font-size: 12px; color: var(--text-secondary); }
+  footer a { color: var(--text-secondary); text-decoration: none; }
+  footer a:hover { color: var(--text); }
 </style>
 </head>
 <body>
 <header>
-  <a class="logo" href="https://gesturecontrol.app/"><div class="logo-dot"></div>GestureControl</a>
+  <a class="logo" href="https://gesturecontrol.app/">GestureControl</a>
   <div class="lang-switcher">
     <button class="lang-btn" id="btnEN" onclick="setLang('en')">EN</button>
     <button class="lang-btn" id="btnTR" onclick="setLang('tr')">TR</button>
@@ -36,67 +36,26 @@
 <div class="content">
   <h1 id="pageTitle">Privacy Policy</h1>
   <div class="date" id="pageDate">Last updated: May 2026</div>
-
   <h2 id="s1title">Camera Data</h2>
   <p id="s1text">GestureControl uses your camera solely for hand gesture recognition. Your camera feed is never sent to any server — all processing happens locally in your browser using on-device machine learning.</p>
-
   <h2 id="s2title">Spotify Integration</h2>
   <p id="s2text">When you connect your Spotify account, we only request permissions necessary for music playback control. Your Spotify credentials are never stored on our servers. Authentication tokens are stored locally in your browser.</p>
-
   <h2 id="s3title">YouTube Integration</h2>
   <p id="s3text">YouTube videos are played through YouTube's own infrastructure. YouTube's privacy policy applies to all video playback. We use the YouTube Data API to enable video search functionality.</p>
-
   <h2 id="s4title">Cookies & Local Storage</h2>
   <p id="s4text">GestureControl uses browser local storage only to save user preferences such as onboarding status and authentication tokens. We do not use third-party tracking cookies.</p>
-
   <h2 id="s5title">Advertising</h2>
-  <p id="s5text">This website may display advertisements served by Google AdSense. Google may use cookies to serve ads based on your prior visits to this website or other websites. You may opt out of personalized advertising by visiting Google's Ads Settings.</p>
-
+  <p id="s5text">This website may display advertisements served by Google AdSense. Google may use cookies to serve ads based on your prior visits to this website or other websites.</p>
   <h2 id="s6title">Contact</h2>
   <p id="s6text">If you have any questions about this Privacy Policy, please contact us through our GitHub repository.</p>
 </div>
 <footer>
   <p>© 2026 GestureControl &nbsp;·&nbsp; <a id="footerAbout" href="https://gesturecontrol.app/about.html">About</a> &nbsp;·&nbsp; <a id="footerPrivacy" href="https://gesturecontrol.app/privacy.html">Privacy Policy</a></p>
 </footer>
-
 <script>
-const T = {
-  en: {
-    pageTitle: 'Privacy Policy', pageDate: 'Last updated: May 2026',
-    s1title: 'Camera Data', s1text: "GestureControl uses your camera solely for hand gesture recognition. Your camera feed is never sent to any server — all processing happens locally in your browser using on-device machine learning.",
-    s2title: 'Spotify Integration', s2text: "When you connect your Spotify account, we only request permissions necessary for music playback control. Your Spotify credentials are never stored on our servers. Authentication tokens are stored locally in your browser.",
-    s3title: 'YouTube Integration', s3text: "YouTube videos are played through YouTube's own infrastructure. YouTube's privacy policy applies to all video playback. We use the YouTube Data API to enable video search functionality.",
-    s4title: 'Cookies & Local Storage', s4text: "GestureControl uses browser local storage only to save user preferences such as onboarding status and authentication tokens. We do not use third-party tracking cookies.",
-    s5title: 'Advertising', s5text: "This website may display advertisements served by Google AdSense. Google may use cookies to serve ads based on your prior visits to this website or other websites. You may opt out of personalized advertising by visiting Google's Ads Settings.",
-    s6title: 'Contact', s6text: "If you have any questions about this Privacy Policy, please contact us through our GitHub repository.",
-    about: 'About', privacy: 'Privacy Policy',
-  },
-  tr: {
-    pageTitle: 'Gizlilik Politikası', pageDate: 'Son güncelleme: Mayıs 2026',
-    s1title: 'Kamera Verisi', s1text: "GestureControl kameranızı yalnızca el hareketi tanıma amacıyla kullanır. Kamera görüntünüz hiçbir sunucuya gönderilmez — tüm işlemler tarayıcınızda cihaz üzerinde gerçekleşir.",
-    s2title: 'Spotify Entegrasyonu', s2text: "Spotify hesabınızla bağlandığınızda yalnızca müzik çalma kontrolü için gerekli izinler istenir. Spotify kimlik bilgileriniz sunucularımızda saklanmaz. Kimlik doğrulama token'ları yalnızca tarayıcınızda yerel olarak saklanır.",
-    s3title: 'YouTube Entegrasyonu', s3text: "YouTube videoları YouTube'un kendi altyapısı üzerinden oynatılır. Tüm video oynatma işlemleri için YouTube'un gizlilik politikası geçerlidir. Video arama özelliği için YouTube Data API kullanılmaktadır.",
-    s4title: 'Çerezler ve Yerel Depolama', s4text: "GestureControl, tarayıcı yerel depolamasını (localStorage) yalnızca onboarding durumu ve kimlik doğrulama token'ları gibi kullanıcı tercihlerini kaydetmek için kullanır. Üçüncü taraf izleme çerezleri kullanılmaz.",
-    s5title: 'Reklamcılık', s5text: "Bu web sitesi Google AdSense tarafından sunulan reklamlar gösterebilir. Google, bu siteye veya diğer sitelere önceki ziyaretlerinize göre reklam sunmak için çerez kullanabilir. Kişiselleştirilmiş reklamlardan çıkmak için Google'ın Reklam Ayarları sayfasını ziyaret edebilirsiniz.",
-    s6title: 'İletişim', s6text: "Gizlilik politikamız hakkında sorularınız için GitHub repomuzu aracılığıyla bizimle iletişime geçebilirsiniz.",
-    about: 'Hakkında', privacy: 'Gizlilik Politikası',
-  }
-};
-
-function setLang(lang) {
-  localStorage.setItem('lang', lang);
-  const t = T[lang];
-  document.getElementById('htmlRoot').lang = lang;
-  document.getElementById('btnEN').className = 'lang-btn' + (lang === 'en' ? ' active' : '');
-  document.getElementById('btnTR').className = 'lang-btn' + (lang === 'tr' ? ' active' : '');
-  Object.keys(t).forEach(k => {
-    const el = document.getElementById(k);
-    if (el) el.textContent = t[k];
-  });
-}
-
-const lang = localStorage.getItem('lang') || 'en';
-setLang(lang);
+const T={en:{pageTitle:'Privacy Policy',pageDate:'Last updated: May 2026',s1title:'Camera Data',s1text:"GestureControl uses your camera solely for hand gesture recognition. Your camera feed is never sent to any server — all processing happens locally in your browser using on-device machine learning.",s2title:'Spotify Integration',s2text:"When you connect your Spotify account, we only request permissions necessary for music playback control. Your Spotify credentials are never stored on our servers.",s3title:'YouTube Integration',s3text:"YouTube videos are played through YouTube's own infrastructure. YouTube's privacy policy applies to all video playback.",s4title:'Cookies & Local Storage',s4text:"GestureControl uses browser local storage only to save user preferences. We do not use third-party tracking cookies.",s5title:'Advertising',s5text:"This website may display advertisements served by Google AdSense. Google may use cookies to serve ads based on your prior visits.",s6title:'Contact',s6text:"If you have any questions about this Privacy Policy, please contact us through our GitHub repository.",footerAbout:'About',footerPrivacy:'Privacy Policy'},tr:{pageTitle:'Gizlilik Politikası',pageDate:'Son güncelleme: Mayıs 2026',s1title:'Kamera Verisi',s1text:"GestureControl kameranızı yalnızca el hareketi tanıma amacıyla kullanır. Kamera görüntünüz hiçbir sunucuya gönderilmez.",s2title:'Spotify Entegrasyonu',s2text:"Spotify hesabınızla bağlandığınızda yalnızca müzik çalma kontrolü için gerekli izinler istenir. Kimlik bilgileriniz sunucularımızda saklanmaz.",s3title:'YouTube Entegrasyonu',s3text:"YouTube videoları YouTube'un kendi altyapısı üzerinden oynatılır.",s4title:'Çerezler ve Yerel Depolama',s4text:"GestureControl tarayıcı yerel depolamasını yalnızca kullanıcı tercihlerini kaydetmek için kullanır. Üçüncü taraf izleme çerezleri kullanılmaz.",s5title:'Reklamcılık',s5text:"Bu web sitesi Google AdSense tarafından sunulan reklamlar gösterebilir.",s6title:'İletişim',s6text:"Gizlilik politikamız hakkında sorularınız için GitHub repomuzu aracılığıyla bizimle iletişime geçebilirsiniz.",footerAbout:'Hakkında',footerPrivacy:'Gizlilik Politikası'}};
+function setLang(lang){localStorage.setItem('lang',lang);document.getElementById('htmlRoot').lang=lang;document.getElementById('btnEN').className='lang-btn'+(lang==='en'?' active':'');document.getElementById('btnTR').className='lang-btn'+(lang==='tr'?' active':'');Object.keys(T[lang]).forEach(k=>{const el=document.getElementById(k);if(el)el.textContent=T[lang][k];});}
+setLang(localStorage.getItem('lang')||'en');
 </script>
 </body>
 </html>
