@@ -431,6 +431,10 @@ function setLang(lang) {
   if (lh) lh.textContent = t.history;
   const vl = document.getElementById('volLabel');
   if (vl) vl.textContent = lang === 'tr' ? 'Ses' : 'Volume';
+  const fa = document.getElementById('footerAbout');
+  const fp = document.getElementById('footerPrivacy');
+  if (fa) fa.textContent = t.about;
+  if (fp) fp.textContent = t.privacy;
   document.getElementById('lastGesture').textContent = t.noGesture;
 
 
