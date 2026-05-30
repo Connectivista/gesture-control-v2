@@ -96,6 +96,7 @@
   .vol-bar { height: 3px; background: rgba(255,255,255,0.08); border-radius: 2px; }
   .vol-fill { height: 100%; background: var(--spotify); border-radius: 2px; transition: width 0.3s; }
   .onboarding { position: fixed; inset: 0; background: rgba(10,10,15,0.95); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; }
+  .onboarding-card { max-height: 90vh; overflow-y: auto; }
   .onboarding-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 40px; max-width: 480px; width: 100%; text-align: center; }
   .onboarding-logo { display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 20px; font-weight: 800; margin-bottom: 24px; }
   .onboarding-logo-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--purple); box-shadow: 0 0 12px var(--purple); }
@@ -144,7 +145,7 @@
         <div class="onboarding-step-num">4</div>
         <div>
           <div class="onboarding-step-text">Volume control</div>
-          <div class="onboarding-step-sub">Baş + işaret parmağı açık → Volume up<br>Thumb + index finger tips touching → Volume down</div>
+          <div class="onboarding-step-sub">Thumb + index finger open → Volume up<br>Thumb + index finger tips touching → Volume down</div>
         </div>
       </div>
     </div>
