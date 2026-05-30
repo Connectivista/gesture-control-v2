@@ -229,7 +229,7 @@
       <div class="last-command-value" id="lastCommand">—</div>
       <div class="last-command-sub" id="lastGesture">No gesture yet</div>
       <div class="vol-bar-wrap" id="volWrap" style="display:none">
-        <div class="vol-label"><span>Ses</span><span id="volPct">—</span></div>
+        <div class="vol-label"><span id="volLabel">Volume</span><span id="volPct">—</span></div>
         <div class="vol-bar"><div class="vol-fill" id="volFill" style="width:0%"></div></div>
       </div>
     </div>
@@ -425,6 +425,8 @@ function setLang(lang) {
   if (lc) lc.textContent = t.lastCommand;
   if (lg) lg.textContent = t.gestures;
   if (lh) lh.textContent = t.history;
+  const vl = document.getElementById('volLabel');
+  if (vl) vl.textContent = lang === 'tr' ? 'Ses' : 'Volume';
   document.getElementById('lastGesture').textContent = t.noGesture;
 
 
@@ -655,11 +657,11 @@ async function startNowPlayingPolling() {
 }
 
 async function execSpotifyAction(gesture) {
-  if (!accessToken) return 'Spotify not connected';
+  if (!accessToken) return LANG[currentLang].notConnected;
   switch(gesture) {
     case 'OPEN_HAND': {
       const state = await spotifyAPI('GET', '/me/player');
-      if (!state) return 'Spotify not active';
+      if (!state) return LANG[currentLang].notActive;
       if (state.is_playing) {
         await spotifyAPI('PUT', '/me/player/pause');
         return 'Stopuldu';
