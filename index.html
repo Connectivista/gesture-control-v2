@@ -39,7 +39,7 @@
   .camera-toggle-btn { display: flex; align-items: center; gap: 6px; padding: 6px 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; color: var(--gray); font-family: "DM Mono", monospace; font-size: 11px; cursor: pointer; white-space: nowrap; }
   .camera-toggle-btn:hover { border-color: var(--purple); color: var(--purple); }
   .yt-player-wrap { resize: vertical; overflow: auto; min-height: 200px; }
-  .yt-player-wrap.cinema { width: 100%; aspect-ratio: 21/9; }
+  
   .camera-wrap { position: relative; border-radius: 16px; overflow: hidden; border: 1px solid var(--border); background: var(--surface); aspect-ratio: 4/3; }
   #video { width: 100%; height: 100%; object-fit: cover; display: block; transform: scaleX(-1); }
   .camera-placeholder { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; color: var(--gray); }
@@ -95,6 +95,9 @@
   .vol-label { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gray); margin-bottom: 6px; display: flex; justify-content: space-between; }
   .vol-bar { height: 3px; background: rgba(255,255,255,0.08); border-radius: 2px; }
   .vol-fill { height: 100%; background: var(--spotify); border-radius: 2px; transition: width 0.3s; }
+  .lang-switcher { display: flex; border: 1px solid var(--border); border-radius: 100px; overflow: hidden; }
+  .lang-btn { padding: 5px 12px; font-family: 'DM Mono', monospace; font-size: 11px; cursor: pointer; background: transparent; color: var(--gray); border: none; }
+  .lang-btn.active { background: var(--purple); color: #fff; }
   .onboarding { position: fixed; inset: 0; background: rgba(10,10,15,0.95); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; }
   .onboarding-card { max-height: 90vh; overflow-y: auto; }
   .onboarding-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 40px; max-width: 480px; width: 100%; text-align: center; }
@@ -160,6 +163,10 @@
       <span style="position:absolute; top:-8px; right:-8px; background:#7F77DD; color:#fff; font-family:'DM Mono',monospace; font-size:9px; padding:2px 6px; border-radius:100px; white-space:nowrap;">Coming Soon</span>
     </div>
     <button class="yt-btn" id="ytBtn" onclick="toggleYoutube()">YouTube Mode</button>
+    <div class="lang-switcher">
+      <button class="lang-btn active" id="btnEN" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" id="btnTR" onclick="setLang('tr')">TR</button>
+    </div>
     <div class="status-pill" id="statusPill"><div class="status-dot"></div><span id="statusText">Ready</span></div>
   </div>
 </header>
@@ -174,9 +181,6 @@
             <button class="yt-search-btn" onclick="searchYoutube()">Search</button>
           </div>
           <div class="yt-results" id="ytResults"></div>
-          <div style="display:flex; justify-content:flex-end; margin-bottom:6px;" id="ytControls" style="display:none;">
-            <button onclick="toggleCinema()" id="cinemaBtn" style="padding:5px 12px; background:var(--surface); border:1px solid var(--border); border-radius:8px; color:var(--gray); font-family:'DM Mono',monospace; font-size:11px; cursor:pointer;">🎬 Cinema Mode</button>
-          </div>
           <div class="yt-player-wrap" id="ytPlayerWrap" style="display:none; aspect-ratio:16/9;">
             <div id="ytPlayerDiv" style="width:100%;height:100%;"></div>
           </div>
@@ -246,6 +250,221 @@ function closeOnboarding() {
   localStorage.setItem('onboarding_seen', '1');
 }
 
+// Dil metinleri
+const LANG = {
+  en: {
+    connectSpotify: 'Connect Spotify',
+    disconnectSpotify: 'Connected — Disconnect',
+    youtubeMode: 'YouTube Mode',
+    youtubeActive: 'YouTube Active',
+    ready: 'Ready',
+    cameraActive: 'Camera active',
+    startCamera: 'Start Camera',
+    stopCamera: 'Stop',
+    hideCamera: 'Hide Camera',
+    showCamera: 'Show Camera',
+    loading: 'Loading...',
+    cameraError: 'Camera access denied',
+    placeholder: 'Click the button below to start',
+    searchPlaceholder: "Search YouTube...",
+    search: 'Search',
+    cinema: '🎬 Cinema Mode',
+    exitCinema: '✕ Exit Cinema',
+    lastCommand: 'LAST COMMAND',
+    noGesture: 'No gesture yet',
+    gestures: 'GESTURES',
+    history: 'HISTORY',
+    noCommands: 'No commands yet',
+    // Onboarding
+    onbTitle: 'Control music with hand gestures',
+    onbDesc: 'While cooking, hands busy — look at your camera and gesture.',
+    onbStep1: 'Choose Spotify or YouTube',
+    onbStep1sub: 'Connect with your Spotify account',
+    onbStep2: 'Start the camera',
+    onbStep2sub: 'Allow camera access',
+    onbStep3: 'Make a gesture',
+    onbStep3sub: 'Open hand → Play/Pause | Index finger → Next | V sign → Previous',
+    onbStep4: 'Volume control',
+    onbStep4sub: 'Thumb + index open → Volume up<br>Thumb + index tips touching → Volume down',
+    onbBtn: 'Get Started →',
+    // Gestures
+    openHand: 'Open hand',
+    thumbIndexOpen: 'Thumb+Index Open',
+    thumbIndexClosed: 'Thumb+Index Closed',
+    indexFinger: 'Index finger',
+    vSign: 'V Sign',
+    playPause: 'Play/Pause',
+    volumeUp: 'Volume up',
+    volumeDown: 'Volume down',
+    next: 'Next',
+    previous: 'Previous',
+    // Actions
+    playing: 'Playing',
+    paused: 'Paused',
+    nextTrack: 'Next Track',
+    prevTrack: 'Previous Track',
+    volUp: 'Volume Up',
+    volDown: 'Volume Down',
+    notConnected: 'Spotify not connected',
+    notActive: 'Spotify not active',
+    ytPaused: 'YouTube: Paused',
+    ytPlaying: 'YouTube: Playing',
+    ytSelect: 'YouTube: Select a video',
+    ytForward: 'YouTube: +10s',
+    ytBackward: 'YouTube: -10s',
+    // Footer
+    about: 'About',
+    privacy: 'Privacy Policy',
+  },
+  tr: {
+    connectSpotify: 'Spotify ile Bağlan',
+    disconnectSpotify: 'Bağlı — Çıkış',
+    youtubeMode: 'YouTube Modu',
+    youtubeActive: 'YouTube Aktif',
+    ready: 'Hazır',
+    cameraActive: 'Kamera aktif',
+    startCamera: 'Kamerayı Başlat',
+    stopCamera: 'Durdur',
+    hideCamera: 'Kamerayı Gizle',
+    showCamera: 'Kamerayı Göster',
+    loading: 'Yükleniyor...',
+    cameraError: 'Kamera erişimi reddedildi',
+    placeholder: 'Başlatmak için aşağıdaki butona tıkla',
+    searchPlaceholder: "YouTube'da ara...",
+    search: 'Ara',
+    cinema: '🎬 Sinema Modu',
+    exitCinema: '✕ Normal Mod',
+    lastCommand: 'SON KOMUT',
+    noGesture: 'Henüz jest yapılmadı',
+    gestures: 'JESTLER',
+    history: 'GEÇMİŞ',
+    noCommands: 'Henüz komut yok',
+    // Onboarding
+    onbTitle: 'El hareketleriyle müzik kontrolü',
+    onbDesc: 'Yemek yaparken, eliniz meşgulken — kameranıza bakın ve jest yapın.',
+    onbStep1: 'Spotify veya YouTube seçin',
+    onbStep1sub: 'Spotify hesabınızla bağlanın',
+    onbStep2: 'Kamerayı başlatın',
+    onbStep2sub: 'Kamera erişimine izin verin',
+    onbStep3: 'Jest yapın',
+    onbStep3sub: 'Açık el → Oynat/Durdur | İşaret parmağı → Sonraki | V işareti → Önceki',
+    onbStep4: 'Ses kontrolü',
+    onbStep4sub: 'Baş + işaret parmağı açık → Ses aç<br>Baş + işaret parmağı uçları değiyor → Ses kıs',
+    onbBtn: 'Başlayalım →',
+    // Gestures
+    openHand: 'Açık el',
+    thumbIndexOpen: 'Baş+İşaret Açık',
+    thumbIndexClosed: 'Baş+İşaret Kapalı',
+    indexFinger: 'İşaret parmağı',
+    vSign: 'V İşareti',
+    playPause: 'Oynat/Durdur',
+    volumeUp: 'Ses aç',
+    volumeDown: 'Ses kıs',
+    next: 'Sonraki',
+    previous: 'Önceki',
+    // Actions
+    playing: 'Çalınıyor',
+    paused: 'Durduruldu',
+    nextTrack: 'Sonraki Şarkı',
+    prevTrack: 'Önceki Şarkı',
+    volUp: 'Ses Artırıldı',
+    volDown: 'Ses Azaltıldı',
+    notConnected: 'Spotify bağlı değil',
+    notActive: 'Spotify aktif değil',
+    ytPaused: 'YouTube: Durduruldu',
+    ytPlaying: 'YouTube: Çalınıyor',
+    ytSelect: 'YouTube: Video seç',
+    ytForward: 'YouTube: +10sn',
+    ytBackward: 'YouTube: -10sn',
+    // Footer
+    about: 'Hakkında',
+    privacy: 'Gizlilik Politikası',
+  }
+};
+
+var currentLang = localStorage.getItem('lang') || 'en';
+
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('lang', lang);
+  const t = LANG[lang];
+
+  // Header
+  document.getElementById('btnEN').className = 'lang-btn' + (lang === 'en' ? ' active' : '');
+  document.getElementById('btnTR').className = 'lang-btn' + (lang === 'tr' ? ' active' : '');
+  document.getElementById('spotifyBtn').textContent = accessToken ? t.disconnectSpotify : t.connectSpotify;
+  document.getElementById('ytBtn').textContent = youtubeMode ? t.youtubeActive : t.youtubeMode;
+  document.getElementById('statusText').textContent = running ? t.cameraActive : t.ready;
+
+  // Camera
+  document.querySelector('#placeholder p').textContent = t.placeholder;
+  document.getElementById('startBtn').textContent = running ? t.stopCamera : t.startCamera;
+  const camToggle = document.getElementById('cameraToggleBtn');
+  if (camToggle) {
+    const isHidden = document.getElementById('cameraWrap').style.display === 'none';
+    camToggle.textContent = isHidden ? '👁 ' + t.showCamera : '👁 ' + t.hideCamera;
+  }
+
+  // YouTube
+  document.getElementById('ytInput').placeholder = t.searchPlaceholder;
+  document.querySelector('.yt-search-btn').textContent = t.search;
+
+  // Sidebar
+  document.querySelector('.card-label').textContent = t.lastCommand;
+  document.getElementById('lastGesture').textContent = t.noGesture;
+  const cardLabels = document.querySelectorAll('.card-label');
+  if (cardLabels[1]) cardLabels[1].textContent = t.gestures;
+  if (cardLabels[2]) cardLabels[2].textContent = t.history;
+
+  // Jest listesi
+  document.querySelector('#row-OPEN_HAND .gesture-name').textContent = t.openHand;
+  document.querySelector('#row-OPEN_HAND .gesture-action').textContent = t.playPause;
+  document.querySelector('#row-THUMB_UP .gesture-name').textContent = t.thumbIndexOpen;
+  document.querySelector('#row-THUMB_UP .gesture-action').textContent = t.volumeUp;
+  document.querySelector('#row-THUMB_SIDE .gesture-name').textContent = t.thumbIndexClosed;
+  document.querySelector('#row-THUMB_SIDE .gesture-action').textContent = t.volumeDown;
+  document.querySelector('#row-POINT_UP .gesture-name').textContent = t.indexFinger;
+  document.querySelector('#row-POINT_UP .gesture-action').textContent = t.next;
+  document.querySelector('#row-PEACE .gesture-name').textContent = t.vSign;
+  document.querySelector('#row-PEACE .gesture-action').textContent = t.previous;
+
+  // Onboarding
+  document.querySelector('.onboarding-title').textContent = t.onbTitle;
+  document.querySelector('.onboarding-desc').textContent = t.onbDesc;
+  const steps = document.querySelectorAll('.onboarding-step-text');
+  const subs = document.querySelectorAll('.onboarding-step-sub');
+  if (steps[0]) steps[0].textContent = t.onbStep1;
+  if (subs[0]) subs[0].textContent = t.onbStep1sub;
+  if (steps[1]) steps[1].textContent = t.onbStep2;
+  if (subs[1]) subs[1].textContent = t.onbStep2sub;
+  if (steps[2]) steps[2].textContent = t.onbStep3;
+  if (subs[2]) subs[2].textContent = t.onbStep3sub;
+  if (steps[3]) steps[3].textContent = t.onbStep4;
+  if (subs[3]) subs[3].innerHTML = t.onbStep4sub;
+  document.querySelector('.onboarding-btn').textContent = t.onbBtn;
+
+  // Footer
+  const footerLinks = document.querySelectorAll('footer a');
+  if (footerLinks[0]) footerLinks[0].textContent = t.about;
+  if (footerLinks[1]) footerLinks[1].textContent = t.privacy;
+
+  // GESTURE_LABELS ve GESTURE_ACTIONS güncelle
+  window.GESTURE_LABELS_CURRENT = {
+    OPEN_HAND: t.openHand,
+    THUMB_UP: t.thumbIndexOpen,
+    THUMB_SIDE: t.thumbIndexClosed,
+    POINT_UP: t.indexFinger,
+    PEACE: t.vSign
+  };
+  window.GESTURE_ACTIONS_CURRENT = {
+    OPEN_HAND: t.playPause,
+    THUMB_UP: t.volUp,
+    THUMB_SIDE: t.volDown,
+    POINT_UP: t.nextTrack,
+    PEACE: t.prevTrack
+  };
+}
+
 // Global değişkenler
 var ytPlayerObj = null;
 var youtubeMode = false;
@@ -278,33 +497,7 @@ function toggleYoutube() {
   }
 }
 
-var cinemaMode = false;
-function toggleCinema() {
-  cinemaMode = !cinemaMode;
-  const wrap = document.getElementById('ytPlayerWrap');
-  const btn = document.getElementById('cinemaBtn');
-  if (cinemaMode) {
-    wrap.classList.add('cinema');
-    btn.textContent = '✕ Exit Cinema';
-  } else {
-    wrap.classList.remove('cinema');
-    btn.textContent = '🎬 Cinema Mode';
-  }
-  if (ytPlayerObj) ytPlayerObj.setSize('100%', wrap.offsetHeight);
-}
 
-function toggleCameraView() {
-  const wrap = document.getElementById('cameraWrap');
-  const btn = document.getElementById('cameraToggleBtn');
-  const isHidden = wrap.style.display === 'none';
-  if (isHidden) {
-    wrap.style.display = 'block';
-    btn.textContent = '👁 Hide Camera';
-  } else {
-    wrap.style.display = 'none';
-    btn.textContent = '👁 Show Camera';
-  }
-}
 
 async function searchYoutube() {
   const query = document.getElementById('ytInput').value;
@@ -325,7 +518,6 @@ async function searchYoutube() {
 function playVideo(videoId) {
   document.getElementById('ytResults').style.display = 'none';
   document.getElementById('ytPlayerWrap').style.display = 'block';
-  document.getElementById('ytControls').style.display = 'flex';
   if (ytPlayerObj) { ytPlayerObj.destroy(); ytPlayerObj = null; }
   ytPlayerObj = new YT.Player('ytPlayerDiv', {
     videoId: videoId,
@@ -345,7 +537,7 @@ const REDIRECT_URI = 'https://gesturecontrol.app/';
 const SCOPES = 'user-modify-playback-state user-read-playback-state';
 
 const GESTURE_LABELS = { OPEN_HAND:'Open Hand', THUMB_UP:'Thumb+Index Open', THUMB_SIDE:'Thumb+Index Closed', POINT_UP:'Index Finger', PEACE:'V Sign' };
-const GESTURE_ACTIONS = { OPEN_HAND:'Play/Stop', THUMB_UP:'Volume Up', THUMB_SIDE:'Volume Down', POINT_UP:'Next Şarkı', PEACE:'Previous Şarkı' };
+const GESTURE_ACTIONS = { OPEN_HAND:'Play/Pause', THUMB_UP:'Volume Up', THUMB_SIDE:'Volume Down', POINT_UP:'Next Track', PEACE:'Previous Track' };
 const THRESHOLDS = { THUMB_UP:6, THUMB_SIDE:6, OPEN_HAND:12, POINT_UP:12, PEACE:12 };
 const COOLDOWNS = { THUMB_UP:800, THUMB_SIDE:800, OPEN_HAND:1500, POINT_UP:1500, PEACE:1500 };
 
@@ -541,7 +733,7 @@ function recognize(lm, handedness) {
   buffer.push(raw);
   const threshold=THRESHOLDS[raw]||12;
   document.getElementById('progressFill').style.width=(Math.min(buffer.length/threshold,1)*100)+'%';
-  document.getElementById('gestureBadge').textContent=GESTURE_LABELS[raw]||raw;
+  document.getElementById('gestureBadge').textContent=(window.GESTURE_LABELS_CURRENT||GESTURE_LABELS)[raw]||raw;
   document.getElementById('gestureBadge').classList.add('visible');
   if(buffer.length>=threshold) return raw;
   return null;
@@ -554,12 +746,13 @@ async function handleGesture(gesture) {
   if(lastGesture===gesture&&(now-(lastActionTime[gesture]||0))<cooldown) return;
   lastGesture=gesture; lastActionTime[gesture]=now;
   const action = youtubeMode ? await execYoutubeAction(gesture) : await execSpotifyAction(gesture);
+  const labels = window.GESTURE_LABELS_CURRENT || GESTURE_LABELS;
   const lc = document.getElementById('lastCommand');
   lc.textContent=action;
   lc.classList.remove('flash');
   void lc.offsetWidth;
   lc.classList.add('flash');
-  document.getElementById('lastGesture').textContent=GESTURE_LABELS[gesture]||gesture;
+  document.getElementById('lastGesture').textContent=(window.GESTURE_LABELS_CURRENT||GESTURE_LABELS)[gesture]||gesture;
   document.querySelectorAll('.gesture-row').forEach(r=>r.classList.remove('highlight'));
   const row=document.getElementById('row-'+gesture);
   if(row){row.classList.add('highlight');setTimeout(()=>row.classList.remove('highlight'),800);}
@@ -636,6 +829,7 @@ function setStatus(active) {
 }
 
 // Init
+setLang(currentLang);
 if (!localStorage.getItem('onboarding_seen')) {
   document.getElementById('onboarding').style.display = 'flex';
 } else {
