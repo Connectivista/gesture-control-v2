@@ -155,19 +155,17 @@
 
 <main>
   <div class="left-section">
-    <div class="media-row">
-      <div class="youtube-col" id="youtubeCol" style="display:none;">
-        <div class="yt-search-wrap" id="ytSearchWrap" style="display:flex;">
-          <div class="yt-search-row">
-            <input class="yt-input" id="ytInput" type="text" placeholder="Search YouTube..." onkeydown="if(event.key==='Enter') searchYoutube()">
-            <button class="yt-search-btn" id="ytSearchBtnEl" onclick="searchYoutube()">Search</button>
-          </div>
-          <div class="yt-results" id="ytResults"></div>
-          <div class="yt-player-wrap" id="ytPlayerWrap"><div id="ytPlayerDiv" style="width:100%;height:100%;"></div></div>
-        </div>
+    <div id="youtubeCol" style="display:none; flex-direction:column; gap:10px; margin-bottom:12px;">
+      <div style="display:flex; gap:8px;">
+        <input class="yt-input" id="ytInput" type="text" placeholder="Search YouTube..." onkeydown="if(event.key==='Enter') searchYoutube()">
+        <button class="yt-search-btn" id="ytSearchBtnEl" onclick="searchYoutube()">Search</button>
       </div>
+      <div class="yt-results" id="ytResults"></div>
+      <div class="yt-player-wrap" id="ytPlayerWrap"><div id="ytPlayerDiv" style="width:100%;height:100%;"></div></div>
+    </div>
+    <div class="media-row">
       <div class="camera-col" id="cameraCol">
-        <button class="camera-toggle-btn" onclick="toggleCameraView()" id="cameraToggleBtn" style="margin-bottom:4px;">👁 Hide Camera</button>
+        <button class="camera-toggle-btn" onclick="toggleCameraView()" id="cameraToggleBtn">👁 Hide Camera</button>
         <div class="camera-wrap" id="cameraWrap">
           <div class="corner corner-tl"></div><div class="corner corner-tr"></div>
           <div class="corner corner-bl"></div><div class="corner corner-br"></div>
@@ -220,7 +218,7 @@
 </main>
 
 <footer>
-  <p>© 2026 GestureControl &nbsp;·&nbsp; <a id="footerAbout" href="https://gesturecontrol.app/about.html">About</a> &nbsp;·&nbsp; <a id="footerPrivacy" href="https://gesturecontrol.app/privacy.html">Privacy Policy</a></p>
+  <p>© 2026 GestureControl &nbsp;·&nbsp; <a id="footerAbout" href="https://connectivista.github.io/gesture-control-v2/about.html">About</a> &nbsp;·&nbsp; <a id="footerPrivacy" href="https://connectivista.github.io/gesture-control-v2/privacy.html">Privacy Policy</a></p>
 </footer>
 
 <script src="https://www.youtube.com/iframe_api"></script>
