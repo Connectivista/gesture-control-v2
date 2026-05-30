@@ -250,7 +250,7 @@
     <div class="card">
       <div class="card-label" id="labelHistory">HISTORY</div>
       <div class="log-list" id="logList">
-        <div class="log-item"><span class="log-action" style="color:var(--gray)">No commands yet</span></div>
+        <div class="log-item"><span class="log-action" id="noCommandsText" style="color:var(--gray)">No commands yet</span></div>
       </div>
     </div>
   </div>
@@ -433,6 +433,8 @@ function setLang(lang) {
   if (lc) lc.textContent = t.lastCommand;
   if (lg) lg.textContent = t.gestures;
   if (lh) lh.textContent = t.history;
+  const nc = document.getElementById('noCommandsText');
+  if (nc) nc.textContent = lang === 'tr' ? 'Henüz komut yok' : 'No commands yet';
   const vl = document.getElementById('volLabel');
   if (vl) vl.textContent = lang === 'tr' ? 'Ses' : 'Volume';
   const fa = document.getElementById('footerAbout');
