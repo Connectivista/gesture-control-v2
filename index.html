@@ -391,6 +391,7 @@ const LANG = {
 };
 
 var currentLang = localStorage.getItem('lang') || 'en';
+var running = false;
 
 function setLang(lang) {
   currentLang = lang;
@@ -553,7 +554,7 @@ const THRESHOLDS = { THUMB_UP:6, THUMB_SIDE:6, OPEN_HAND:12, POINT_UP:12, PEACE:
 const COOLDOWNS = { THUMB_UP:800, THUMB_SIDE:800, OPEN_HAND:1500, POINT_UP:1500, PEACE:1500 };
 
 let handLandmarker = null;
-let running = false;
+// running is defined globally above
 let animFrame = null;
 let buffer = [], prevRaw = null, handSide = 'Right';
 let lastGesture = null, lastActionTime = {};
