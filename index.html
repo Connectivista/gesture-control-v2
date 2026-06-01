@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" id="htmlRoot">
 <head>
-<!-- Google tag (gtag.js) --> <script async src="https://www.googletagmanager.com/gtag/js?id=G-YKBH8250SD"></script> <script>   window.dataLayer = window.dataLayer || [];   function gtag(){dataLayer.push(arguments);}   gtag('js', new Date());    gtag('config', 'G-YKBH8250SD'); </script>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YKBH8250SD"></script>
 <script>
@@ -10,6 +9,23 @@
   gtag('js', new Date());
   gtag('config', 'G-YKBH8250SD');
 </script>
+
+<!-- Dark mode flicker önleme -->
+<script>
+(function() {
+  try {
+    var saved = localStorage.getItem('theme');
+    if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+  } catch(e) {
+    document.documentElement.setAttribute('data-theme', 'light');
+  }
+})();
+</script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GestureControl — Control Music With Hand Gestures</title>
@@ -21,26 +37,71 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ── Light theme ── */
   :root {
     --bg: #ffffff; --surface: #f5f5f7; --border: #d2d2d7;
     --text: #1d1d1f; --text-secondary: #6e6e73;
     --accent: #0071e3; --green: #34c759; --red: #ff3b30;
+    --header-bg: rgba(255,255,255,0.85);
+    --try-btn-bg: #1d1d1f; --try-btn-color: #fff;
+    --gesture-row-hover: #e8e8ed;
+    --gesture-row-highlight: #e8f0fe;
+    --yt-result-hover: #e8e8ed;
+    --onboarding-card-bg: #fff;
+    --now-playing-bg: rgba(255,255,255,0.9);
+    --now-playing-border: rgba(0,0,0,0.08);
+    --gesture-icon-bg: #fff;
   }
-  body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, sans-serif; min-height: 100vh; display: flex; flex-direction: column; -webkit-font-smoothing: antialiased; }
-  header { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 52px; background: rgba(255,255,255,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+
+  /* ── Dark theme ── */
+  [data-theme="dark"] {
+    --bg: #000; --surface: #1c1c1e; --border: #3a3a3c;
+    --text: #fff; --text-secondary: #a1a1a6;
+    --accent: #0a84ff; --green: #30d158; --red: #ff453a;
+    --header-bg: rgba(0,0,0,0.85);
+    --try-btn-bg: #fff; --try-btn-color: #000;
+    --gesture-row-hover: #2c2c2e;
+    --gesture-row-highlight: #1c2b4a;
+    --yt-result-hover: #2c2c2e;
+    --onboarding-card-bg: #1c1c1e;
+    --now-playing-bg: rgba(28,28,30,0.95);
+    --now-playing-border: rgba(255,255,255,0.08);
+    --gesture-icon-bg: #2c2c2e;
+  }
+
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, sans-serif; min-height: 100vh; display: flex; flex-direction: column; -webkit-font-smoothing: antialiased; transition: background 0.2s, color 0.2s; }
+  header { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 52px; background: var(--header-bg); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
   .logo { font-size: 17px; font-weight: 600; letter-spacing: -0.02em; }
   .header-right { display: flex; align-items: center; gap: 8px; }
   .pill-btn { display: flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 100px; font-size: 13px; font-weight: 500; cursor: pointer; border: none; transition: all 0.15s; font-family: 'Inter', sans-serif; }
   .pill-btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-secondary); }
   .pill-btn-outline:hover { background: var(--surface); }
   .pill-btn-green { background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
+  [data-theme="dark"] .pill-btn-green { background: #0d3320; color: #30d158; border-color: #1a5c35; }
   .pill-btn-red { background: #ffeaea; color: var(--red); border: 1px solid #ffcdd2; }
+  [data-theme="dark"] .pill-btn-red { background: #2d0f0f; color: var(--red); border-color: #5c1a1a; }
   .lang-switcher { display: flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
   .lang-btn { padding: 5px 10px; font-size: 12px; font-weight: 500; cursor: pointer; background: transparent; color: var(--text-secondary); border: none; font-family: 'Inter', sans-serif; }
-  .lang-btn.active { background: var(--text); color: #fff; }
+  .lang-btn.active { background: var(--text); color: var(--bg); }
   .status-dot-wrap { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--text-secondary); }
   .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #86868b; }
   .status-dot.active { background: var(--green); }
+
+  /* ── Theme toggle ── */
+  .theme-btn {
+    width: 32px; height: 32px; border-radius: 50%;
+    border: 1px solid var(--border); background: var(--surface);
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    font-size: 15px; transition: background 0.15s, transform 0.1s; flex-shrink: 0;
+  }
+  .theme-btn:hover { background: var(--border); }
+  .theme-btn:active { transform: scale(0.92); }
+  .icon-sun  { display: none; }
+  .icon-moon { display: block; }
+  [data-theme="dark"] .icon-sun  { display: block; }
+  [data-theme="dark"] .icon-moon { display: none; }
+
   main { flex: 1; display: grid; grid-template-columns: 1fr 320px; gap: 20px; max-width: 1200px; margin: 0 auto; width: 100%; padding: 24px; }
   .left-section { display: flex; flex-direction: column; gap: 12px; }
   .media-row { display: flex; gap: 16px; align-items: flex-start; }
@@ -52,37 +113,35 @@
   .camera-placeholder svg { color: #c7c7cc; }
   .camera-placeholder p { font-size: 13px; color: var(--text-secondary); }
   .corner { position: absolute; width: 18px; height: 18px; z-index: 5; }
-  .corner-tl { top: 10px; left: 10px; border-top: 2px solid rgba(0,0,0,0.15); border-left: 2px solid rgba(0,0,0,0.15); }
-  .corner-tr { top: 10px; right: 10px; border-top: 2px solid rgba(0,0,0,0.15); border-right: 2px solid rgba(0,0,0,0.15); }
-  .corner-bl { bottom: 10px; left: 10px; border-bottom: 2px solid rgba(0,0,0,0.15); border-left: 2px solid rgba(0,0,0,0.15); }
-  .corner-br { bottom: 10px; right: 10px; border-bottom: 2px solid rgba(0,0,0,0.15); border-right: 2px solid rgba(0,0,0,0.15); }
+  .corner-tl { top: 10px; left: 10px; border-top: 2px solid rgba(128,128,128,0.3); border-left: 2px solid rgba(128,128,128,0.3); }
+  .corner-tr { top: 10px; right: 10px; border-top: 2px solid rgba(128,128,128,0.3); border-right: 2px solid rgba(128,128,128,0.3); }
+  .corner-bl { bottom: 10px; left: 10px; border-bottom: 2px solid rgba(128,128,128,0.3); border-left: 2px solid rgba(128,128,128,0.3); }
+  .corner-br { bottom: 10px; right: 10px; border-bottom: 2px solid rgba(128,128,128,0.3); border-right: 2px solid rgba(128,128,128,0.3); }
   .gesture-overlay { position: absolute; bottom: 0; left: 0; right: 0; padding: 14px; background: linear-gradient(transparent, rgba(0,0,0,0.25)); z-index: 5; min-height: 70px; display: flex; flex-direction: column; justify-content: flex-end; gap: 6px; }
   .gesture-badge { display: inline-flex; align-items: center; background: rgba(0,0,0,0.55); backdrop-filter: blur(10px); color: #fff; padding: 5px 12px; border-radius: 100px; font-size: 12px; font-weight: 500; opacity: 0; transition: all 0.2s; width: fit-content; }
   .gesture-badge.visible { opacity: 1; }
   .progress-bar { height: 2px; background: rgba(255,255,255,0.2); border-radius: 2px; }
   .progress-fill { height: 100%; background: #fff; border-radius: 2px; width: 0%; transition: width 0.1s; }
-  .now-playing { position: absolute; top: 10px; left: 10px; right: 10px; z-index: 5; display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.9); backdrop-filter: blur(20px); border-radius: 12px; padding: 8px 12px; opacity: 0; transition: opacity 0.3s; border: 1px solid rgba(0,0,0,0.08); }
+  .now-playing { position: absolute; top: 10px; left: 10px; right: 10px; z-index: 5; display: flex; align-items: center; gap: 10px; background: var(--now-playing-bg); backdrop-filter: blur(20px); border-radius: 12px; padding: 8px 12px; opacity: 0; transition: opacity 0.3s; border: 1px solid var(--now-playing-border); }
   .now-playing.visible { opacity: 1; }
   .now-playing-art { width: 32px; height: 32px; border-radius: 6px; background: var(--surface); flex-shrink: 0; object-fit: cover; }
   .now-playing-title { font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .now-playing-artist { font-size: 11px; color: var(--text-secondary); }
-  .start-btn { display: flex; align-items: center; justify-content: center; width: 100%; padding: 14px; background: var(--text); border: none; border-radius: 12px; color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.15s; }
-  .start-btn:hover { background: #3a3a3c; }
-  .start-btn.running { background: var(--red); }
+  .start-btn { display: flex; align-items: center; justify-content: center; width: 100%; padding: 14px; background: var(--text); border: none; border-radius: 12px; color: var(--bg); font-size: 15px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.15s; }
+  .start-btn:hover { opacity: 0.85; }
+  .start-btn.running { background: var(--red); color: #fff; }
   .camera-toggle-btn { display: flex; align-items: center; gap: 6px; padding: 7px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; color: var(--text-secondary); font-size: 12px; font-weight: 500; cursor: pointer; font-family: 'Inter', sans-serif; width: fit-content; }
-  .yt-search-wrap { display: none; flex-direction: column; gap: 10px; }
-  .yt-search-row { display: flex; gap: 8px; }
   .yt-input { flex: 1; padding: 10px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-size: 14px; outline: none; font-family: 'Inter', sans-serif; }
   .yt-input:focus { border-color: var(--accent); }
   .yt-search-btn { padding: 10px 18px; background: var(--accent); border: none; border-radius: 10px; color: #fff; font-size: 14px; font-weight: 500; cursor: pointer; font-family: 'Inter', sans-serif; }
   .yt-results { display: none; flex-direction: column; gap: 6px; max-height: 180px; overflow-y: auto; }
   .yt-result-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; cursor: pointer; }
-  .yt-result-item:hover { background: #e8e8ed; }
+  .yt-result-item:hover { background: var(--yt-result-hover); }
   .yt-result-img { width: 56px; border-radius: 6px; flex-shrink: 0; }
   .yt-result-title { font-size: 12px; color: var(--text); }
   .yt-player-wrap { display: none; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); aspect-ratio: 16/9; }
   .sidebar { display: flex; flex-direction: column; gap: 12px; }
-  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 18px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 18px; transition: background 0.2s, border-color 0.2s; }
   .card-label { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 12px; }
   .last-command-value { font-size: 24px; font-weight: 700; letter-spacing: -0.03em; min-height: 30px; }
   .last-command-sub { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
@@ -90,12 +149,12 @@
   @keyframes flash { 0% { color: var(--accent); } 100% { color: var(--text); } }
   .gesture-list { display: flex; flex-direction: column; gap: 4px; }
   .gesture-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; border-radius: 10px; transition: background 0.15s; }
-  .gesture-row:hover { background: #e8e8ed; }
-  .gesture-row.highlight { background: #e8f0fe; }
+  .gesture-row:hover { background: var(--gesture-row-hover); }
+  .gesture-row.highlight { background: var(--gesture-row-highlight); }
   .gesture-left { display: flex; align-items: center; gap: 10px; }
-  .gesture-icon { width: 30px; height: 30px; border-radius: 8px; background: #fff; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 14px; }
+  .gesture-icon { width: 30px; height: 30px; border-radius: 8px; background: var(--gesture-icon-bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 14px; }
   .gesture-name { font-size: 13px; font-weight: 500; }
-  .gesture-action { font-size: 11px; color: var(--text-secondary); background: #fff; padding: 3px 8px; border-radius: 100px; border: 1px solid var(--border); }
+  .gesture-action { font-size: 11px; color: var(--text-secondary); background: var(--gesture-icon-bg); padding: 3px 8px; border-radius: 100px; border: 1px solid var(--border); }
   .log-list { display: flex; flex-direction: column; gap: 4px; max-height: 130px; overflow-y: auto; }
   .log-item { display: flex; align-items: center; justify-content: space-between; font-size: 12px; padding: 4px 0; border-bottom: 1px solid var(--border); }
   .log-action { font-weight: 500; }
@@ -105,16 +164,16 @@
   .vol-bar { height: 3px; background: var(--border); border-radius: 2px; }
   .vol-fill { height: 100%; background: var(--green); border-radius: 2px; transition: width 0.3s; }
   .onboarding { position: fixed; inset: 0; background: rgba(0,0,0,0.3); backdrop-filter: blur(10px); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 20px; }
-  .onboarding-card { background: #fff; border-radius: 20px; padding: 40px; max-width: 480px; width: 100%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.12); }
+  .onboarding-card { background: var(--onboarding-card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 40px; max-width: 480px; width: 100%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.12); }
   .onboarding-logo { font-size: 17px; font-weight: 700; margin-bottom: 24px; letter-spacing: -0.02em; }
   .onboarding-title { font-size: 26px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.03em; }
   .onboarding-desc { font-size: 14px; color: var(--text-secondary); margin-bottom: 28px; line-height: 1.6; }
   .onboarding-steps { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; text-align: left; }
-  .onboarding-step { display: flex; align-items: flex-start; gap: 14px; padding: 12px 14px; background: var(--surface); border-radius: 12px; }
-  .onboarding-step-num { width: 24px; height: 24px; border-radius: 50%; background: var(--text); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+  .onboarding-step { display: flex; align-items: flex-start; gap: 14px; padding: 12px 14px; background: var(--surface); border-radius: 12px; border: 1px solid var(--border); }
+  .onboarding-step-num { width: 24px; height: 24px; border-radius: 50%; background: var(--text); color: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
   .onboarding-step-text { font-size: 13px; font-weight: 600; }
   .onboarding-step-sub { font-size: 12px; color: var(--text-secondary); margin-top: 2px; line-height: 1.5; }
-  .onboarding-btn { width: 100%; padding: 14px; background: var(--text); border: none; border-radius: 12px; color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; }
+  .onboarding-btn { width: 100%; padding: 14px; background: var(--text); border: none; border-radius: 12px; color: var(--bg); font-size: 15px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; }
   footer { text-align: center; padding: 20px 24px; border-top: 1px solid var(--border); font-size: 12px; color: var(--text-secondary); }
   footer a { color: var(--text-secondary); text-decoration: none; }
   footer a:hover { color: var(--text); }
@@ -129,6 +188,7 @@
     .last-command-value { font-size: 20px; }
     .onboarding-card { padding: 28px 20px; }
     .onboarding-title { font-size: 22px; }
+    .theme-btn { width: 28px; height: 28px; font-size: 13px; }
   }
 </style>
 </head>
@@ -157,6 +217,13 @@
       <span style="position:absolute; top:-8px; right:-8px; background:#7F77DD; color:#fff; font-family:'Inter',sans-serif; font-size:9px; font-weight:600; padding:2px 6px; border-radius:100px; white-space:nowrap;">Coming Soon</span>
     </div>
     <button class="pill-btn pill-btn-red" id="ytBtn" onclick="toggleYoutube()">YouTube Mode</button>
+
+    <!-- Dark mode toggle -->
+    <button class="theme-btn" id="themeToggle" aria-label="Switch to dark mode" onclick="toggleTheme()">
+      <span class="icon-moon" aria-hidden="true">🌙</span>
+      <span class="icon-sun"  aria-hidden="true">☀️</span>
+    </button>
+
     <div class="lang-switcher">
       <button class="lang-btn active" id="btnEN" onclick="setLang('en')">EN</button>
       <button class="lang-btn" id="btnTR" onclick="setLang('tr')">TR</button>
@@ -173,14 +240,10 @@
         <button class="yt-search-btn" id="ytSearchBtnEl" onclick="searchYoutube()">Search</button>
       </div>
       <div class="yt-results" id="ytResults"></div>
-      
-      <!-- Playlist URL input -->
       <div style="display:flex;gap:8px;">
         <input class="yt-input" id="ytPlaylistUrl" type="text" placeholder="Paste YouTube playlist URL..." style="font-size:12px;">
         <button class="yt-search-btn" onclick="loadPlaylist()" style="font-size:12px;padding:8px 14px;">Load</button>
       </div>
-
-      <!-- Playlist -->
       <div id="ytPlaylist" style="display:none;flex-direction:column;gap:6px;max-height:180px;overflow-y:auto;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
           <span style="font-size:11px;font-weight:600;color:var(--text-secondary);">PLAYLIST</span>
@@ -188,7 +251,6 @@
         </div>
         <div id="ytPlaylistItems"></div>
       </div>
-
       <div class="yt-player-wrap" id="ytPlayerWrap"><div id="ytPlayerDiv" style="width:100%;height:100%;"></div></div>
     </div>
     <div class="media-row">
@@ -246,17 +308,30 @@
 </main>
 
 <footer>
-  <p>© 2026 GestureControl &nbsp;·&nbsp; <a id="footerAbout" href="https://gesturecontrol.app/about.html">About</a> &nbsp;·&nbsp; <a id="footerPrivacy" href="https://gesturecontrol.app/privacy.html">Privacy Policy</a></p>
+  <p>© 2026 GestureControl &nbsp;·&nbsp; <a id="footerAbout" href="https://gesturecontrol.app/about.html">About</a> &nbsp;·&nbsp; <a id="footerContact" href="https://gesturecontrol.app/contact.html">Contact</a> &nbsp;·&nbsp; <a id="footerPrivacy" href="https://gesturecontrol.app/privacy.html">Privacy Policy</a></p>
 </footer>
 
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
 var ytPlayerObj=null,youtubeMode=false,accessToken=null,currentVolume=50,nowPlayingInterval=null,running=false,currentVideoId=null,relatedVideos=[],playlist=[],playlistIndex=-1;
 var currentLang=localStorage.getItem('lang')||'en';
-function onYouTubeIframeAPIReady(){}
-const LANG={en:{connectSpotify:'Connect Spotify',disconnectSpotify:'Disconnect',youtubeMode:'YouTube Mode',youtubeActive:'YouTube Active',ready:'Ready',cameraActive:'Camera active',startCamera:'Start Camera',stopCamera:'Stop',hideCamera:'👁 Hide Camera',showCamera:'👁 Show Camera',loading:'Loading...',cameraError:'Camera access denied',placeholder:'Click the button below to start',searchPlaceholder:'Search YouTube...',search:'Search',lastCommand:'LAST COMMAND',noGesture:'No gesture yet',gestures:'GESTURES',history:'HISTORY',noCommands:'No commands yet',onbTitle:'Control music with hand gestures',onbDesc:'While cooking, hands busy — look at your camera and gesture.',onbStep1:'Choose Spotify or YouTube',onbStep1sub:'Connect with your Spotify account',onbStep2:'Start the camera',onbStep2sub:'Allow camera access',onbStep3:'Make a gesture',onbStep3sub:'Open hand → Play/Pause | Index finger → Next | V sign → Previous',onbStep4:'Volume control',onbStep4sub:'Thumb + index open → Volume up<br>Thumb + index tips touching → Volume down',onbBtn:'Get Started',openHand:'Open hand',thumbIndexOpen:'Thumb+Index Open',thumbIndexClosed:'Thumb+Index Closed',indexFinger:'Index finger',vSign:'V Sign',playPause:'Play/Pause',volumeUp:'Volume up',volumeDown:'Volume down',next:'Next',previous:'Previous',playing:'Playing',paused:'Paused',nextTrack:'Next Track',prevTrack:'Previous Track',volUp:'Volume Up',volDown:'Volume Down',notConnected:'Spotify not connected',notActive:'Spotify not active',ytPaused:'YouTube: Paused',ytPlaying:'YouTube: Playing',ytSelect:'YouTube: Select a video',ytForward:'YouTube: +10s',ytBackward:'YouTube: -10s',ytVolUp:'YouTube: Volume Up',ytVolDown:'YouTube: Volume Down',about:'About',privacy:'Privacy Policy',volume:'Volume'},tr:{connectSpotify:'Spotify ile Bağlan',disconnectSpotify:'Bağlantıyı Kes',youtubeMode:'YouTube Modu',youtubeActive:'YouTube Aktif',ready:'Hazır',cameraActive:'Kamera aktif',startCamera:'Kamerayı Başlat',stopCamera:'Durdur',hideCamera:'👁 Kamerayı Gizle',showCamera:'👁 Kamerayı Göster',loading:'Yükleniyor...',cameraError:'Kamera erişimi reddedildi',placeholder:'Başlatmak için aşağıdaki butona tıkla',searchPlaceholder:"YouTube'da ara...",search:'Ara',lastCommand:'SON KOMUT',noGesture:'Henüz jest yapılmadı',gestures:'JESTLER',history:'GEÇMİŞ',noCommands:'Henüz komut yok',onbTitle:'El hareketleriyle müzik kontrolü',onbDesc:'Yemek yaparken, eliniz meşgulken — kameranıza bakın ve jest yapın.',onbStep1:'Spotify veya YouTube seçin',onbStep1sub:'Spotify hesabınızla bağlanın',onbStep2:'Kamerayı başlatın',onbStep2sub:'Kamera erişimine izin verin',onbStep3:'Jest yapın',onbStep3sub:'Açık el → Oynat/Durdur | İşaret parmağı → Sonraki | V işareti → Önceki',onbStep4:'Ses kontrolü',onbStep4sub:'Baş + işaret açık → Ses aç<br>Baş + işaret uçları değiyor → Ses kıs',onbBtn:'Başlayalım',openHand:'Açık el',thumbIndexOpen:'Baş+İşaret Açık',thumbIndexClosed:'Baş+İşaret Kapalı',indexFinger:'İşaret parmağı',vSign:'V İşareti',playPause:'Oynat/Durdur',volumeUp:'Ses aç',volumeDown:'Ses kıs',next:'Sonraki',previous:'Önceki',playing:'Çalınıyor',paused:'Durduruldu',nextTrack:'Sonraki Şarkı',prevTrack:'Önceki Şarkı',volUp:'Ses Artırıldı',volDown:'Ses Azaltıldı',notConnected:'Spotify bağlı değil',notActive:'Spotify aktif değil',ytPaused:'YouTube: Durduruldu',ytPlaying:'YouTube: Çalınıyor',ytSelect:'YouTube: Video seç',ytForward:'YouTube: +10sn',ytBackward:'YouTube: -10sn',ytVolUp:'YouTube: Ses Aç',ytVolDown:'YouTube: Ses Kıs',about:'Hakkında',privacy:'Gizlilik Politikası',volume:'Ses'}};
 
-function setLang(lang){currentLang=lang;localStorage.setItem('lang',lang);const t=LANG[lang];document.getElementById('htmlRoot').lang=lang;document.getElementById('btnEN').className='lang-btn'+(lang==='en'?' active':'');document.getElementById('btnTR').className='lang-btn'+(lang==='tr'?' active':'');document.getElementById('spotifyBtn').textContent=accessToken?t.disconnectSpotify:t.connectSpotify;document.getElementById('ytBtn').textContent=youtubeMode?t.youtubeActive:t.youtubeMode;document.getElementById('statusText').textContent=running?t.cameraActive:t.ready;document.getElementById('placeholderText').textContent=t.placeholder;document.getElementById('startBtn').textContent=running?t.stopCamera:t.startCamera;document.getElementById('ytInput').placeholder=t.searchPlaceholder;document.getElementById('ytSearchBtnEl').textContent=t.search;document.getElementById('labelLastCommand').textContent=t.lastCommand;document.getElementById('lastGesture').textContent=t.noGesture;document.getElementById('labelGestures').textContent=t.gestures;document.getElementById('labelHistory').textContent=t.history;const nc=document.getElementById('noCommandsText');if(nc)nc.textContent=t.noCommands;const vl=document.getElementById('volLabel');if(vl)vl.textContent=t.volume;const ctb=document.getElementById('cameraToggleBtn');if(ctb){const hidden=document.getElementById('cameraWrap').style.display==='none';ctb.textContent=hidden?t.showCamera:t.hideCamera;}['OPEN_HAND','THUMB_UP','THUMB_SIDE','POINT_UP','PEACE'].forEach(k=>{const gn=document.getElementById('g-'+k);const ga=document.getElementById('ga-'+k);if(gn)gn.textContent=t[{OPEN_HAND:'openHand',THUMB_UP:'thumbIndexOpen',THUMB_SIDE:'thumbIndexClosed',POINT_UP:'indexFinger',PEACE:'vSign'}[k]];if(ga)ga.textContent=t[{OPEN_HAND:'playPause',THUMB_UP:'volumeUp',THUMB_SIDE:'volumeDown',POINT_UP:'next',PEACE:'previous'}[k]];});document.getElementById('footerAbout').textContent=t.about;document.getElementById('footerPrivacy').textContent=t.privacy;document.getElementById('onbTitle').textContent=t.onbTitle;document.getElementById('onbDesc').textContent=t.onbDesc;document.getElementById('onbStep1').textContent=t.onbStep1;document.getElementById('onbStep1sub').textContent=t.onbStep1sub;document.getElementById('onbStep2').textContent=t.onbStep2;document.getElementById('onbStep2sub').textContent=t.onbStep2sub;document.getElementById('onbStep3').textContent=t.onbStep3;document.getElementById('onbStep3sub').textContent=t.onbStep3sub;document.getElementById('onbStep4').textContent=t.onbStep4;document.getElementById('onbStep4sub').innerHTML=t.onbStep4sub;document.getElementById('onbBtn').textContent=t.onbBtn;window.GESTURE_LABELS_CURRENT={OPEN_HAND:t.openHand,THUMB_UP:t.thumbIndexOpen,THUMB_SIDE:t.thumbIndexClosed,POINT_UP:t.indexFinger,PEACE:t.vSign};}
+/* ── Theme ── */
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  try { localStorage.setItem('theme', next); } catch(e) {}
+  document.getElementById('themeToggle').setAttribute('aria-label', next === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+}
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+  try { if (!localStorage.getItem('theme')) document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light'); } catch(err) {}
+});
+
+function onYouTubeIframeAPIReady(){}
+const LANG={en:{connectSpotify:'Connect Spotify',disconnectSpotify:'Disconnect',youtubeMode:'YouTube Mode',youtubeActive:'YouTube Active',ready:'Ready',cameraActive:'Camera active',startCamera:'Start Camera',stopCamera:'Stop',hideCamera:'👁 Hide Camera',showCamera:'👁 Show Camera',loading:'Loading...',cameraError:'Camera access denied',placeholder:'Click the button below to start',searchPlaceholder:'Search YouTube...',search:'Search',lastCommand:'LAST COMMAND',noGesture:'No gesture yet',gestures:'GESTURES',history:'HISTORY',noCommands:'No commands yet',onbTitle:'Control music with hand gestures',onbDesc:'While cooking, hands busy — look at your camera and gesture.',onbStep1:'Choose Spotify or YouTube',onbStep1sub:'Connect with your Spotify account',onbStep2:'Start the camera',onbStep2sub:'Allow camera access',onbStep3:'Make a gesture',onbStep3sub:'Open hand → Play/Pause | Index finger → Next | V sign → Previous',onbStep4:'Volume control',onbStep4sub:'Thumb + index open → Volume up<br>Thumb + index tips touching → Volume down',onbBtn:'Get Started',openHand:'Open hand',thumbIndexOpen:'Thumb+Index Open',thumbIndexClosed:'Thumb+Index Closed',indexFinger:'Index finger',vSign:'V Sign',playPause:'Play/Pause',volumeUp:'Volume up',volumeDown:'Volume down',next:'Next',previous:'Previous',playing:'Playing',paused:'Paused',nextTrack:'Next Track',prevTrack:'Previous Track',volUp:'Volume Up',volDown:'Volume Down',notConnected:'Spotify not connected',notActive:'Spotify not active',ytPaused:'YouTube: Paused',ytPlaying:'YouTube: Playing',ytSelect:'YouTube: Select a video',ytForward:'YouTube: +10s',ytBackward:'YouTube: -10s',ytVolUp:'YouTube: Volume Up',ytVolDown:'YouTube: Volume Down',about:'About',contact:'Contact',privacy:'Privacy Policy',volume:'Volume'},tr:{connectSpotify:'Spotify ile Bağlan',disconnectSpotify:'Bağlantıyı Kes',youtubeMode:'YouTube Modu',youtubeActive:'YouTube Aktif',ready:'Hazır',cameraActive:'Kamera aktif',startCamera:'Kamerayı Başlat',stopCamera:'Durdur',hideCamera:'👁 Kamerayı Gizle',showCamera:'👁 Kamerayı Göster',loading:'Yükleniyor...',cameraError:'Kamera erişimi reddedildi',placeholder:'Başlatmak için aşağıdaki butona tıkla',searchPlaceholder:"YouTube'da ara...",search:'Ara',lastCommand:'SON KOMUT',noGesture:'Henüz jest yapılmadı',gestures:'JESTLER',history:'GEÇMİŞ',noCommands:'Henüz komut yok',onbTitle:'El hareketleriyle müzik kontrolü',onbDesc:'Yemek yaparken, eliniz meşgulken — kameranıza bakın ve jest yapın.',onbStep1:'Spotify veya YouTube seçin',onbStep1sub:'Spotify hesabınızla bağlanın',onbStep2:'Kamerayı başlatın',onbStep2sub:'Kamera erişimine izin verin',onbStep3:'Jest yapın',onbStep3sub:'Açık el → Oynat/Durdur | İşaret parmağı → Sonraki | V işareti → Önceki',onbStep4:'Ses kontrolü',onbStep4sub:'Baş + işaret açık → Ses aç<br>Baş + işaret uçları değiyor → Ses kıs',onbBtn:'Başlayalım',openHand:'Açık el',thumbIndexOpen:'Baş+İşaret Açık',thumbIndexClosed:'Baş+İşaret Kapalı',indexFinger:'İşaret parmağı',vSign:'V İşareti',playPause:'Oynat/Durdur',volumeUp:'Ses aç',volumeDown:'Ses kıs',next:'Sonraki',previous:'Önceki',playing:'Çalınıyor',paused:'Durduruldu',nextTrack:'Sonraki Şarkı',prevTrack:'Önceki Şarkı',volUp:'Ses Artırıldı',volDown:'Ses Azaltıldı',notConnected:'Spotify bağlı değil',notActive:'Spotify aktif değil',ytPaused:'YouTube: Durduruldu',ytPlaying:'YouTube: Çalınıyor',ytSelect:'YouTube: Video seç',ytForward:'YouTube: +10sn',ytBackward:'YouTube: -10sn',ytVolUp:'YouTube: Ses Aç',ytVolDown:'YouTube: Ses Kıs',about:'Hakkında',contact:'İletişim',privacy:'Gizlilik Politikası',volume:'Ses'}};
+
+function setLang(lang){currentLang=lang;localStorage.setItem('lang',lang);const t=LANG[lang];document.getElementById('htmlRoot').lang=lang;document.getElementById('btnEN').className='lang-btn'+(lang==='en'?' active':'');document.getElementById('btnTR').className='lang-btn'+(lang==='tr'?' active':'');document.getElementById('spotifyBtn').textContent=accessToken?t.disconnectSpotify:t.connectSpotify;document.getElementById('ytBtn').textContent=youtubeMode?t.youtubeActive:t.youtubeMode;document.getElementById('statusText').textContent=running?t.cameraActive:t.ready;document.getElementById('placeholderText').textContent=t.placeholder;document.getElementById('startBtn').textContent=running?t.stopCamera:t.startCamera;document.getElementById('ytInput').placeholder=t.searchPlaceholder;document.getElementById('ytSearchBtnEl').textContent=t.search;document.getElementById('labelLastCommand').textContent=t.lastCommand;document.getElementById('lastGesture').textContent=t.noGesture;document.getElementById('labelGestures').textContent=t.gestures;document.getElementById('labelHistory').textContent=t.history;const nc=document.getElementById('noCommandsText');if(nc)nc.textContent=t.noCommands;const vl=document.getElementById('volLabel');if(vl)vl.textContent=t.volume;const ctb=document.getElementById('cameraToggleBtn');if(ctb){const hidden=document.getElementById('cameraWrap').style.display==='none';ctb.textContent=hidden?t.showCamera:t.hideCamera;}['OPEN_HAND','THUMB_UP','THUMB_SIDE','POINT_UP','PEACE'].forEach(k=>{const gn=document.getElementById('g-'+k);const ga=document.getElementById('ga-'+k);if(gn)gn.textContent=t[{OPEN_HAND:'openHand',THUMB_UP:'thumbIndexOpen',THUMB_SIDE:'thumbIndexClosed',POINT_UP:'indexFinger',PEACE:'vSign'}[k]];if(ga)ga.textContent=t[{OPEN_HAND:'playPause',THUMB_UP:'volumeUp',THUMB_SIDE:'volumeDown',POINT_UP:'next',PEACE:'previous'}[k]];});document.getElementById('footerAbout').textContent=t.about;document.getElementById('footerContact').textContent=t.contact;document.getElementById('footerPrivacy').textContent=t.privacy;document.getElementById('onbTitle').textContent=t.onbTitle;document.getElementById('onbDesc').textContent=t.onbDesc;document.getElementById('onbStep1').textContent=t.onbStep1;document.getElementById('onbStep1sub').textContent=t.onbStep1sub;document.getElementById('onbStep2').textContent=t.onbStep2;document.getElementById('onbStep2sub').textContent=t.onbStep2sub;document.getElementById('onbStep3').textContent=t.onbStep3;document.getElementById('onbStep3sub').textContent=t.onbStep3sub;document.getElementById('onbStep4').textContent=t.onbStep4;document.getElementById('onbStep4sub').innerHTML=t.onbStep4sub;document.getElementById('onbBtn').textContent=t.onbBtn;window.GESTURE_LABELS_CURRENT={OPEN_HAND:t.openHand,THUMB_UP:t.thumbIndexOpen,THUMB_SIDE:t.thumbIndexClosed,POINT_UP:t.indexFinger,PEACE:t.vSign};}
 
 function closeOnboarding(){document.getElementById('onboarding').style.display='none';localStorage.setItem('onboarding_seen','1');}
 function toggleYoutube(){youtubeMode=!youtubeMode;const btn=document.getElementById('ytBtn');const col=document.getElementById('youtubeCol');const t=LANG[currentLang];if(youtubeMode){btn.textContent=t.youtubeActive;btn.className='pill-btn pill-btn-green';col.style.display='flex';}else{btn.textContent=t.youtubeMode;btn.className='pill-btn pill-btn-red';col.style.display='none';document.getElementById('ytResults').style.display='none';document.getElementById('ytPlayerWrap').style.display='none';if(ytPlayerObj){ytPlayerObj.destroy();ytPlayerObj=null;}}}
@@ -266,93 +341,17 @@ async function searchYoutube(){const query=document.getElementById('ytInput').va
         <img class="yt-result-img" src="${item.snippet.thumbnails.default.url}">
         <span class="yt-result-title">${item.snippet.title}</span>
       </div>
-      <button onclick="addToPlaylist('${item.id.videoId}','${item.snippet.title.replace(/'/g,"\'")}','${item.snippet.thumbnails.default.url}')" 
+      <button onclick="addToPlaylist('${item.id.videoId}','${item.snippet.title.replace(/'/g,"\'")}','${item.snippet.thumbnails.default.url}')"
               style="background:var(--accent);color:#fff;border:none;border-radius:6px;padding:4px 8px;font-size:11px;cursor:pointer;flex-shrink:0;margin-left:8px;">+</button>
     </div>
   `).join('');}
-function playVideo(videoId, title, thumb){
-  currentVideoId=videoId;
-  document.getElementById('ytResults').style.display='none';
-  document.getElementById('ytPlayerWrap').style.display='block';
-  if(window.ytPlayerObj){window.ytPlayerObj.destroy();window.ytPlayerObj=null;}
-  window.ytPlayerObj=new YT.Player('ytPlayerDiv',{videoId,width:'100%',height:'100%',playerVars:{autoplay:1,controls:1},events:{onReady:(e)=>e.target.playVideo()}});
-  // Playlist index güncelle
-  const idx = playlist.findIndex(v=>v.id===videoId);
-  if(idx>=0) playlistIndex=idx;
-  renderPlaylist();
-}
-
-function addToPlaylist(videoId, title, thumb){
-  if(playlist.find(v=>v.id===videoId)) return;
-  playlist.push({id:videoId, title:title||videoId, thumb:thumb||''});
-  if(playlist.length===1) playlistIndex=0;
-  renderPlaylist();
-}
-
-function renderPlaylist(){
-  const container = document.getElementById('ytPlaylistItems');
-  const wrap = document.getElementById('ytPlaylist');
-  if(playlist.length===0){ wrap.style.display='none'; return; }
-  wrap.style.display='flex';
-  container.innerHTML = playlist.map((v,i)=>`
-    <div onclick="playVideo('${v.id}','${v.title.replace(/'/g,"\'")}','${v.thumb}')" 
-         style="display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;cursor:pointer;background:${i===playlistIndex?'#e8f0fe':'transparent'};transition:background 0.15s;">
-      <img src="${v.thumb}" style="width:48px;height:36px;border-radius:4px;object-fit:cover;flex-shrink:0;">
-      <span style="font-size:11px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;">${v.title}</span>
-      <button onclick="event.stopPropagation();playlist.splice(${i},1);if(playlistIndex>=playlist.length)playlistIndex=playlist.length-1;renderPlaylist();" 
-              style="background:none;border:none;cursor:pointer;color:var(--text-secondary);font-size:14px;flex-shrink:0;">✕</button>
-    </div>
-  `).join('');
-}
-
-function clearPlaylist(){
-  playlist=[];playlistIndex=-1;
-  document.getElementById('ytPlaylist').style.display='none';
-  document.getElementById('ytPlaylistItems').innerHTML='';
-}
-
-async function loadPlaylist(){
-  const url = document.getElementById('ytPlaylistUrl').value;
-  const match = url.match(/[?&]list=([A-Za-z0-9_-]+)/);
-  if(!match){ alert('Invalid playlist URL'); return; }
-  const playlistId = match[1];
-  const YOUTUBE_API_KEY = document.querySelector('[data-ytkey]')?.dataset.ytkey || '';
-  
-  // API key'i bul
-  let apiKey = '';
-  document.querySelectorAll('script').forEach(s=>{
-    const m = s.textContent.match(/key=([A-Za-z0-9_-]{30,})/);
-    if(m) apiKey=m[1];
-  });
-  
-  try {
-    const res = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${playlistId}&key=${apiKey}`);
-    const data = await res.json();
-    if(data.items){
-      data.items.forEach(item=>{
-        const vid = item.snippet.resourceId.videoId;
-        const title = item.snippet.title;
-        const thumb = item.snippet.thumbnails?.default?.url||'';
-        addToPlaylist(vid, title, thumb);
-      });
-      document.getElementById('ytPlaylistUrl').value='';
-    }
-  } catch(e){ alert('Could not load playlist'); }
-}
-async function fetchRelatedVideos(videoId){
-  const KEY=document.querySelector('script[src*="googleapis"]') ? '' : '';
-  try {
-    const scripts = document.querySelectorAll('script');
-    let apiKey = '';
-    scripts.forEach(s => { if(s.textContent.includes('googleapis.com/youtube/v3/search')) { const m = s.textContent.match(/key=([A-Za-z0-9_-]+)/); if(m) apiKey = m[1]; }});
-    if(!apiKey) { const res2 = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&relatedToVideoId=${videoId}&type=video&maxResults=5&key=AIzaSyBIjS4tPrIc7wBIANwEr7SlPnCfJCkFWzk`); const data2 = await res2.json(); if(data2.items) relatedVideos = data2.items.map(i=>i.id.videoId).filter(Boolean); }
-  } catch(e) { relatedVideos=[]; }
-}
+function playVideo(videoId,title,thumb){currentVideoId=videoId;document.getElementById('ytResults').style.display='none';document.getElementById('ytPlayerWrap').style.display='block';if(window.ytPlayerObj){window.ytPlayerObj.destroy();window.ytPlayerObj=null;}window.ytPlayerObj=new YT.Player('ytPlayerDiv',{videoId,width:'100%',height:'100%',playerVars:{autoplay:1,controls:1},events:{onReady:(e)=>e.target.playVideo()}});const idx=playlist.findIndex(v=>v.id===videoId);if(idx>=0)playlistIndex=idx;renderPlaylist();}
+function addToPlaylist(videoId,title,thumb){if(playlist.find(v=>v.id===videoId))return;playlist.push({id:videoId,title:title||videoId,thumb:thumb||''});if(playlist.length===1)playlistIndex=0;renderPlaylist();}
+function renderPlaylist(){const container=document.getElementById('ytPlaylistItems');const wrap=document.getElementById('ytPlaylist');if(playlist.length===0){wrap.style.display='none';return;}wrap.style.display='flex';container.innerHTML=playlist.map((v,i)=>`<div onclick="playVideo('${v.id}','${v.title.replace(/'/g,"\'")}','${v.thumb}')" style="display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;cursor:pointer;background:${i===playlistIndex?'var(--gesture-row-highlight)':'transparent'};transition:background 0.15s;"><img src="${v.thumb}" style="width:48px;height:36px;border-radius:4px;object-fit:cover;flex-shrink:0;"><span style="font-size:11px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;">${v.title}</span><button onclick="event.stopPropagation();playlist.splice(${i},1);if(playlistIndex>=playlist.length)playlistIndex=playlist.length-1;renderPlaylist();" style="background:none;border:none;cursor:pointer;color:var(--text-secondary);font-size:14px;flex-shrink:0;">✕</button></div>`).join('');}
+function clearPlaylist(){playlist=[];playlistIndex=-1;document.getElementById('ytPlaylist').style.display='none';document.getElementById('ytPlaylistItems').innerHTML='';}
+async function loadPlaylist(){const url=document.getElementById('ytPlaylistUrl').value;const match=url.match(/[?&]list=([A-Za-z0-9_-]+)/);if(!match){alert('Invalid playlist URL');return;}const playlistId=match[1];let apiKey='AIzaSyBIjS4tPrIc7wBIANwEr7SlPnCfJCkFWzk';try{const res=await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${playlistId}&key=${apiKey}`);const data=await res.json();if(data.items){data.items.forEach(item=>{const vid=item.snippet.resourceId.videoId;const title=item.snippet.title;const thumb=item.snippet.thumbnails?.default?.url||'';addToPlaylist(vid,title,thumb);});document.getElementById('ytPlaylistUrl').value='';}}catch(e){alert('Could not load playlist');}}
 function toggleCameraView(){const wrap=document.getElementById('cameraWrap');const btn=document.getElementById('cameraToggleBtn');const t=LANG[currentLang];if(wrap.style.display==='none'){wrap.style.display='block';btn.textContent=t.hideCamera;}else{wrap.style.display='none';btn.textContent=t.showCamera;}}
-
-const CLIENT_ID='c4b23c55e2144b70be08d462d1608556';
-const REDIRECT_URI='https://gesturecontrol.app/';
-const SCOPES='user-modify-playback-state user-read-playback-state';
+const CLIENT_ID='c4b23c55e2144b70be08d462d1608556';const REDIRECT_URI='https://gesturecontrol.app/';const SCOPES='user-modify-playback-state user-read-playback-state';
 function generateCodeVerifier(){const arr=new Uint8Array(32);crypto.getRandomValues(arr);return btoa(String.fromCharCode(...arr)).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');}
 async function generateCodeChallenge(v){const enc=new TextEncoder().encode(v);const hash=await crypto.subtle.digest('SHA-256',enc);return btoa(String.fromCharCode(...new Uint8Array(hash))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');}
 function spotifyAuth(){if(accessToken){disconnectSpotify();return;}(async()=>{const v=generateCodeVerifier();const c=await generateCodeChallenge(v);localStorage.setItem('pkce_verifier',v);const p=new URLSearchParams({client_id:CLIENT_ID,response_type:'code',redirect_uri:REDIRECT_URI,scope:SCOPES,code_challenge_method:'S256',code_challenge:c});window.location='https://accounts.spotify.com/authorize?'+p;})();}
@@ -362,25 +361,7 @@ function setSpotifyConnected(connected){const btn=document.getElementById('spoti
 async function spotifyAPI(method,endpoint,body){if(!accessToken)return null;const res=await fetch('https://api.spotify.com/v1'+endpoint,{method,headers:{Authorization:'Bearer '+accessToken,'Content-Type':'application/json'},body:body?JSON.stringify(body):undefined});if(res.status===204)return{};if(res.ok)return res.json().catch(()=>({}));if(res.status===401){disconnectSpotify();return null;}return null;}
 async function startNowPlayingPolling(){const update=async()=>{const data=await spotifyAPI('GET','/me/player');if(!data||!data.item)return;document.getElementById('nowTitle').textContent=data.item.name;document.getElementById('nowArtist').textContent=data.item.artists.map(a=>a.name).join(', ');const art=document.getElementById('nowArt');if(data.item.album.images[0])art.src=data.item.album.images[0].url;document.getElementById('nowState').textContent=data.is_playing?'▶':'⏸';document.getElementById('nowPlaying').classList.add('visible');currentVolume=data.device?.volume_percent??50;document.getElementById('volWrap').style.display='block';document.getElementById('volPct').textContent=currentVolume+'%';document.getElementById('volFill').style.width=currentVolume+'%';};update();nowPlayingInterval=setInterval(update,3000);}
 async function execSpotifyAction(gesture){const t=LANG[currentLang];if(!accessToken)return t.notConnected;switch(gesture){case'OPEN_HAND':{const state=await spotifyAPI('GET','/me/player');if(!state)return t.notActive;if(state.is_playing){await spotifyAPI('PUT','/me/player/pause');return t.paused;}else{const d=state.device?.id;await spotifyAPI('PUT',d?'/me/player/play?device_id='+d:'/me/player/play');return t.playing;}}case'POINT_UP':await spotifyAPI('POST','/me/player/next');return t.nextTrack;case'PEACE':await spotifyAPI('POST','/me/player/previous');return t.prevTrack;case'THUMB_UP':{const vol=Math.min(100,currentVolume+10);await spotifyAPI('PUT','/me/player/volume?volume_percent='+vol);currentVolume=vol;return t.volUp+': '+vol+'%';}case'THUMB_SIDE':{const vol=Math.max(0,currentVolume-10);await spotifyAPI('PUT','/me/player/volume?volume_percent='+vol);currentVolume=vol;return t.volDown+': '+vol+'%';}}return gesture;}
-async function execYoutubeAction(gesture){const t=LANG[currentLang];const p=window.ytPlayerObj;if(!p||typeof p.getPlayerState!=='function')return t.ytSelect;switch(gesture){case'OPEN_HAND':if(p.getPlayerState()===1){p.pauseVideo();return t.ytPaused;}else{p.playVideo();return t.ytPlaying;}case'THUMB_UP':{const v=Math.min(100,p.getVolume()+10);p.setVolume(v);document.getElementById('volFill').style.width=v+'%';document.getElementById('volPct').textContent=v+'%';document.getElementById('volWrap').style.display='block';return t.ytVolUp+' '+v+'%';}case'THUMB_SIDE':{const v=Math.max(0,p.getVolume()-10);p.setVolume(v);document.getElementById('volFill').style.width=v+'%';document.getElementById('volPct').textContent=v+'%';document.getElementById('volWrap').style.display='block';return t.ytVolDown+' '+v+'%';}case'POINT_UP':
-  if(playlist.length>0){
-    playlistIndex=(playlistIndex+1)%playlist.length;
-    const next=playlist[playlistIndex];
-    playVideo(next.id,next.title,next.thumb);
-    return t.nextTrack||'Next Video';
-  } else {
-    p.seekTo(p.getCurrentTime()+10,true);
-    return t.ytForward;
-  }case'PEACE':
-  if(playlist.length>0){
-    playlistIndex=(playlistIndex-1+playlist.length)%playlist.length;
-    const prev=playlist[playlistIndex];
-    playVideo(prev.id,prev.title,prev.thumb);
-    return t.prevTrack||'Previous Video';
-  } else {
-    p.seekTo(Math.max(0,p.getCurrentTime()-10),true);
-    return t.ytBackward;
-  }}return gesture;}
+async function execYoutubeAction(gesture){const t=LANG[currentLang];const p=window.ytPlayerObj;if(!p||typeof p.getPlayerState!=='function')return t.ytSelect;switch(gesture){case'OPEN_HAND':if(p.getPlayerState()===1){p.pauseVideo();return t.ytPaused;}else{p.playVideo();return t.ytPlaying;}case'THUMB_UP':{const v=Math.min(100,p.getVolume()+10);p.setVolume(v);document.getElementById('volFill').style.width=v+'%';document.getElementById('volPct').textContent=v+'%';document.getElementById('volWrap').style.display='block';return t.ytVolUp+' '+v+'%';}case'THUMB_SIDE':{const v=Math.max(0,p.getVolume()-10);p.setVolume(v);document.getElementById('volFill').style.width=v+'%';document.getElementById('volPct').textContent=v+'%';document.getElementById('volWrap').style.display='block';return t.ytVolDown+' '+v+'%';}case'POINT_UP':if(playlist.length>0){playlistIndex=(playlistIndex+1)%playlist.length;const next=playlist[playlistIndex];playVideo(next.id,next.title,next.thumb);return t.nextTrack||'Next Video';}else{p.seekTo(p.getCurrentTime()+10,true);return t.ytForward;}case'PEACE':if(playlist.length>0){playlistIndex=(playlistIndex-1+playlist.length)%playlist.length;const prev=playlist[playlistIndex];playVideo(prev.id,prev.title,prev.thumb);return t.prevTrack||'Previous Video';}else{p.seekTo(Math.max(0,p.getCurrentTime()-10),true);return t.ytBackward;}}return gesture;}
 
 setLang(currentLang);
 if(!localStorage.getItem('onboarding_seen')){document.getElementById('onboarding').style.display='flex';}else{document.getElementById('onboarding').style.display='none';}
