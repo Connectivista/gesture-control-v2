@@ -185,6 +185,35 @@ gtag('config', 'G-YKBH8250SD');
   .gesture-card .name { font-size: 12px; font-weight: 600; margin-bottom: 4px; }
   .gesture-card .action { font-size: 11px; color: var(--text-secondary); }
 
+  /* ── Content sections ── */
+  .content-section { max-width: 900px; margin: 0 auto 80px; padding: 0 24px; }
+  .content-section h2 { font-size: 28px; font-weight: 700; margin-bottom: 16px; letter-spacing: -0.03em; }
+  .content-section p { font-size: 15px; color: var(--text-secondary); line-height: 1.8; margin-bottom: 16px; }
+  .content-section p:last-child { margin-bottom: 0; }
+
+  .steps-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 24px; }
+  .step-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 24px; transition: background 0.2s; }
+  .step-num { font-size: 12px; font-weight: 700; color: var(--accent); letter-spacing: 0.05em; margin-bottom: 10px; }
+  .step-title { font-size: 15px; font-weight: 600; margin-bottom: 8px; letter-spacing: -0.01em; }
+  .step-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+
+  .usecases-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px; }
+  .usecase { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 20px; }
+  .usecase-icon { font-size: 28px; margin-bottom: 10px; }
+  .usecase-title { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+  .usecase-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+
+  .tech-list { display: flex; flex-direction: column; gap: 12px; margin-top: 24px; }
+  .tech-item { display: flex; align-items: flex-start; gap: 16px; padding: 16px 20px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; }
+  .tech-badge { font-size: 11px; font-weight: 700; color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, transparent); padding: 4px 10px; border-radius: 100px; white-space: nowrap; flex-shrink: 0; margin-top: 2px; }
+  .tech-info .tech-name { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .tech-info .tech-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+
+  @media (max-width: 768px) {
+    .steps-grid { grid-template-columns: 1fr; }
+    .usecases-grid { grid-template-columns: 1fr; }
+  }
+
   footer { text-align: center; padding: 20px 24px; border-top: 1px solid var(--border); font-size: 12px; color: var(--text-secondary); }
   footer a { color: var(--text-secondary); text-decoration: none; }
   footer a:hover { color: var(--text); }
@@ -259,6 +288,74 @@ gtag('config', 'G-YKBH8250SD');
   </div>
 </div>
 
+<!-- How it works -->
+<div class="content-section">
+  <h2 id="howTitle">How It Works</h2>
+  <p id="howDesc">GestureControl uses your device's camera to track your hand movements in real time. You don't need to install anything — it runs entirely in your web browser. When you make a recognized gesture, the app instantly sends the corresponding command to YouTube or Spotify.</p>
+  <p id="howDesc2">The whole process happens locally on your device. Your camera feed is never uploaded to any server, stored, or shared. Only you can see it.</p>
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-num" id="step1num">STEP 1</div>
+      <div class="step-title" id="step1title">Open the app in your browser</div>
+      <div class="step-desc" id="step1desc">No download or installation needed. GestureControl works on any modern browser — Chrome, Edge, Safari, or Firefox.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num" id="step2num">STEP 2</div>
+      <div class="step-title" id="step2title">Allow camera access</div>
+      <div class="step-desc" id="step2desc">Click "Start Camera" and grant camera permission when prompted. Your camera stays private — all processing is done locally.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num" id="step3num">STEP 3</div>
+      <div class="step-title" id="step3title">Connect YouTube or Spotify</div>
+      <div class="step-desc" id="step3desc">Enable YouTube Mode to search and play videos with gestures. Spotify support is coming soon.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num" id="step4num">STEP 4</div>
+      <div class="step-title" id="step4title">Gesture to control</div>
+      <div class="step-desc" id="step4desc">Hold up your hand in front of the camera and make a gesture. The app recognizes your movement and executes the command instantly.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Who it's for -->
+<div class="content-section">
+  <h2 id="whoTitle">Who Is It For?</h2>
+  <p id="whoDesc">GestureControl is designed for anyone who finds themselves unable to use their hands to control music or video — whether temporarily or by habit.</p>
+  <div class="usecases-grid">
+    <div class="usecase">
+      <div class="usecase-icon" aria-hidden="true">🍳</div>
+      <div class="usecase-title" id="uc1title">Cooking</div>
+      <div class="usecase-desc" id="uc1desc">Your hands are covered in dough or oil. Just wave at the camera to skip a track or turn up the volume.</div>
+    </div>
+    <div class="usecase">
+      <div class="usecase-icon" aria-hidden="true">🏋️</div>
+      <div class="usecase-title" id="uc2title">Working Out</div>
+      <div class="usecase-desc" id="uc2desc">Mid-set and need to pause? No need to stop, dry off, and find your phone. A quick gesture does the job.</div>
+    </div>
+    <div class="usecase">
+      <div class="usecase-icon" aria-hidden="true">🎨</div>
+      <div class="usecase-title" id="uc3title">Creative Work</div>
+      <div class="usecase-desc" id="uc3desc">Painting, sculpting, or crafting? Keep your focus and tools in your hands while still controlling your music.</div>
+    </div>
+    <div class="usecase">
+      <div class="usecase-icon" aria-hidden="true">♿</div>
+      <div class="usecase-title" id="uc4title">Accessibility</div>
+      <div class="usecase-desc" id="uc4desc">For people with limited mobility, gesture control can offer a hands-free way to interact with media without touching a device.</div>
+    </div>
+    <div class="usecase">
+      <div class="usecase-icon" aria-hidden="true">🧹</div>
+      <div class="usecase-title" id="uc5title">Cleaning</div>
+      <div class="usecase-desc" id="uc5desc">Scrubbing the bathroom or mopping the floor — keep the music going without ever setting down your tools.</div>
+    </div>
+    <div class="usecase">
+      <div class="usecase-icon" aria-hidden="true">👶</div>
+      <div class="usecase-title" id="uc6title">Parenting</div>
+      <div class="usecase-desc" id="uc6desc">Holding a baby in one arm and need to change the song? A single gesture from across the room works perfectly.</div>
+    </div>
+  </div>
+</div>
+
+
 <footer>
   <p>© 2026 GestureControl &nbsp;·&nbsp;
     <a id="footerAbout" href="https://gesturecontrol.app/about.html" aria-current="page">About</a> &nbsp;·&nbsp;
@@ -308,6 +405,23 @@ const T = {
     g4name: 'Thumb+Index Open', g4action: 'Volume Up',
     g5name: 'Thumb+Index Closed', g5action: 'Volume Down',
     footerAbout: 'About', footerContact: 'Contact', footerPrivacy: 'Privacy Policy',
+    howTitle: 'How It Works',
+    howDesc: 'GestureControl uses your device\'s camera to track your hand movements in real time. You don\'t need to install anything — it runs entirely in your web browser. When you make a recognized gesture, the app instantly sends the corresponding command to YouTube or Spotify.',
+    howDesc2: 'The whole process happens locally on your device. Your camera feed is never uploaded to any server, stored, or shared. Only you can see it.',
+    step1num: 'STEP 1', step1title: 'Open the app in your browser', step1desc: 'No download or installation needed. GestureControl works on any modern browser — Chrome, Edge, Safari, or Firefox.',
+    step2num: 'STEP 2', step2title: 'Allow camera access', step2desc: 'Click "Start Camera" and grant camera permission when prompted. Your camera stays private — all processing is done locally.',
+    step3num: 'STEP 3', step3title: 'Connect YouTube or Spotify', step3desc: 'Enable YouTube Mode to search and play videos with gestures. Spotify support is coming soon.',
+    step4num: 'STEP 4', step4title: 'Gesture to control', step4desc: 'Hold up your hand in front of the camera and make a gesture. The app recognizes your movement and executes the command instantly.',
+    whoTitle: 'Who Is It For?',
+    whoDesc: 'GestureControl is designed for anyone who finds themselves unable to use their hands to control music or video — whether temporarily or by habit.',
+    uc1title: 'Cooking', uc1desc: 'Your hands are covered in dough or oil. Just wave at the camera to skip a track or turn up the volume.',
+    uc2title: 'Working Out', uc2desc: 'Mid-set and need to pause? No need to stop, dry off, and find your phone. A quick gesture does the job.',
+    uc3title: 'Creative Work', uc3desc: 'Painting, sculpting, or crafting? Keep your focus and tools in your hands while still controlling your music.',
+    uc4title: 'Accessibility', uc4desc: 'For people with limited mobility, gesture control can offer a hands-free way to interact with media without touching a device.',
+    uc5title: 'Cleaning', uc5desc: 'Scrubbing the bathroom or mopping the floor — keep the music going without ever setting down your tools.',
+    uc6title: 'Parenting', uc6desc: 'Holding a baby in one arm and need to change the song? A single gesture from across the room works perfectly.',
+    techTitle: 'Technology',
+    techDesc: 'GestureControl is built entirely with open web technologies. There are no native apps, no plugins, and no external servers involved in processing your camera feed.',
   },
   tr: {
     tryBtnHeader: 'Dene →', tryBtnHero: 'Ücretsiz Dene →',
@@ -323,6 +437,23 @@ const T = {
     g4name: 'Baş+İşaret Açık', g4action: 'Ses Aç',
     g5name: 'Baş+İşaret Kapalı', g5action: 'Ses Kıs',
     footerAbout: 'Hakkında', footerContact: 'İletişim', footerPrivacy: 'Gizlilik Politikası',
+    howTitle: 'Nasıl Çalışır?',
+    howDesc: 'GestureControl, el hareketlerinizi gerçek zamanlı olarak algılamak için cihazınızın kamerasını kullanır. Herhangi bir şey yüklemenize gerek yok — tamamen web tarayıcınızda çalışır. Tanınan bir jest yaptığınızda, uygulama anında YouTube veya Spotify\'a ilgili komutu gönderir.',
+    howDesc2: 'Tüm işlem cihazınızda yerel olarak gerçekleşir. Kamera görüntünüz hiçbir sunucuya yüklenmez, saklanmaz veya paylaşılmaz. Yalnızca siz görebilirsiniz.',
+    step1num: 'ADIM 1', step1title: 'Uygulamayı tarayıcınızda açın', step1desc: 'İndirme veya kurulum gerekmez. GestureControl Chrome, Edge, Safari veya Firefox gibi tüm modern tarayıcılarda çalışır.',
+    step2num: 'ADIM 2', step2title: 'Kamera erişimine izin verin', step2desc: '"Kamerayı Başlat" butonuna tıklayın ve istendiğinde kamera iznini verin. Kameranız gizli kalır — tüm işlemler yerel olarak yapılır.',
+    step3num: 'ADIM 3', step3title: 'YouTube veya Spotify\'a bağlanın', step3desc: 'Jestlerle video aramak ve oynatmak için YouTube Modunu etkinleştirin. Spotify desteği yakında geliyor.',
+    step4num: 'ADIM 4', step4title: 'Jest yaparak kontrol edin', step4desc: 'Elinizi kameranın önünde kaldırın ve bir jest yapın. Uygulama hareketinizi tanır ve komutu anında uygular.',
+    whoTitle: 'Kimler İçin?',
+    whoDesc: 'GestureControl, geçici olarak ya da alışkanlık nedeniyle müzik veya video kontrolü için ellerini kullanamayan herkes için tasarlanmıştır.',
+    uc1title: 'Yemek Pişirme', uc1desc: 'Elleriniz hamur ya da yağla kaplı. Kameraya el sallayarak şarkıyı atlayın veya sesi açın.',
+    uc2title: 'Spor', uc2desc: 'Set ortasında duraklatmak mı istiyorsunuz? Durup telefonunuzu bulmaya gerek yok. Hızlı bir jest yeterli.',
+    uc3title: 'Yaratıcı Çalışma', uc3desc: 'Boyama, heykel veya el işi yapıyorsunuz? Odağınızı ve araçlarınızı elinizde tutarken müziğinizi kontrol edin.',
+    uc4title: 'Erişilebilirlik', uc4desc: 'Hareket kabiliyeti sınırlı bireyler için jest kontrolü, bir cihaza dokunmadan medyayla etkileşime geçmenin pratik bir yolunu sunar.',
+    uc5title: 'Temizlik', uc5desc: 'Banyo ovuyor ya da paspas çekiyorsunuz — aletlerinizi bırakmadan müziği devam ettirin.',
+    uc6title: 'Ebeveynlik', uc6desc: 'Bir kolunuzda bebek var ve şarkıyı değiştirmeniz mi gerekiyor? Odanın karşısından tek bir jest yeterli.',
+    techTitle: 'Teknoloji',
+    techDesc: 'GestureControl tamamen açık web teknolojileriyle geliştirilmiştir. Hiçbir yerel uygulama, eklenti veya kamera görüntünüzü işleyen harici sunucu bulunmamaktadır.',
   }
 };
 
