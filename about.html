@@ -1,20 +1,43 @@
 <!DOCTYPE html>
 <html lang="en" id="htmlRoot">
 <head>
-<!-- Google tag (gtag.js) --> <script async src="https://www.googletagmanager.com/gtag/js?id=G-YKBH8250SD"></script> <script>   window.dataLayer = window.dataLayer || [];   function gtag(){dataLayer.push(arguments);}   gtag('js', new Date());    gtag('config', 'G-YKBH8250SD'); </script>
-<!-- Google tag (gtag.js) -->
+
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YKBH8250SD"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-YKBH8250SD');
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-YKBH8250SD');
 </script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>About — GestureControl</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<meta name="description" content="Control YouTube videos and music playback with hand gestures directly in your browser. No downloads required.">
+<meta name="keywords" content="gesture control, hand tracking, youtube control, hand gestures, mediapipe">
+<meta name="robots" content="index, follow">
+
+<meta property="og:title" content="GestureControl">
+<meta property="og:description" content="Control music and videos with your hands">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://gesturecontrol.app/">
+<meta property="og:image" content="https://gesturecontrol.app/og-image.png">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="GestureControl">
+<meta name="twitter:description" content="Control music and videos with your hands">
+<meta name="twitter:image" content="https://gesturecontrol.app/og-image.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap&display=swap" rel="stylesheet">
+
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root { --bg: #ffffff; --surface: #f5f5f7; --border: #d2d2d7; --text: #1d1d1f; --text-secondary: #6e6e73; --accent: #0071e3; --green: #34c759; }
@@ -44,56 +67,156 @@
   footer { text-align: center; padding: 20px 24px; border-top: 1px solid var(--border); font-size: 12px; color: var(--text-secondary); }
   footer a { color: var(--text-secondary); text-decoration: none; }
   footer a:hover { color: var(--text); }
+  footer a[aria-current="page"] { color: var(--text); font-weight: 600; }
   @media (max-width: 768px) {
     .hero h1 { font-size: 32px; }
     .features { grid-template-columns: 1fr; }
-    .gesture-grid { grid-template-columns: repeat(3, 1fr); }
+    .gesture-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    /* 5 kartı 3 sütunda gösterince son satırda 2 kart ortada kalır */
+    .gesture-grid .gesture-card:last-child:nth-child(3n+1) { grid-column: 1 / -1; }
+    .gesture-grid .gesture-card:last-child:nth-child(3n+2),
+    .gesture-grid .gesture-card:nth-last-child(2):nth-child(3n+1) { /* 5 kart için son 2'yi ortala */ }
   }
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #000;
+    --surface: #1c1c1e;
+    --border: #3a3a3c;
+    --text: #fff;
+    --text-secondary: #a1a1a6;
+    --accent: #0a84ff;
+  }
+
+  header {
+    background: rgba(0,0,0,.85);
+  }
+
+  .try-btn {
+    background: #fff;
+    color: #000;
+  }
+}
+
 </style>
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"SoftwareApplication",
+  "name":"GestureControl",
+  "applicationCategory":"MultimediaApplication",
+  "operatingSystem":"Web Browser",
+  "url":"https://gesturecontrol.app",
+  "description":"Control YouTube videos and music with hand gestures."
+}
+</script>
 </head>
 <body>
 <header>
   <a class="logo" href="https://gesturecontrol.app/">GestureControl</a>
   <div class="header-right">
-    <div class="lang-switcher">
-      <button class="lang-btn" id="btnEN" onclick="setLang('en')">EN</button>
-      <button class="lang-btn" id="btnTR" onclick="setLang('tr')">TR</button>
+    <div class="lang-switcher" role="group" aria-label="Language selector">
+      <button class="lang-btn" id="btnEN" onclick="setLang('en')" aria-pressed="false">EN</button>
+      <button class="lang-btn" id="btnTR" onclick="setLang('tr')" aria-pressed="false">TR</button>
     </div>
-    <a class="try-btn" id="tryBtn" href="https://gesturecontrol.app/">Try it →</a>
+    <a class="try-btn" id="tryBtnHeader" href="https://gesturecontrol.app/">Try it →</a>
   </div>
 </header>
 
 <div class="hero">
   <h1 id="heroTitle">Control music with your hands</h1>
   <p id="heroDesc">While cooking, working out, or whenever your hands are busy — just look at your camera and gesture. No touching your phone or keyboard needed.</p>
-  <a class="try-btn" id="tryBtn2" href="https://gesturecontrol.app/">Try it Free →</a>
+  <a class="try-btn" id="tryBtnHero" href="https://gesturecontrol.app/">Try it Free →</a>
 </div>
 
 <div class="features">
-  <div class="feature"><div class="feature-icon">✋</div><div class="feature-title" id="f1title">5 Gestures, Full Control</div><div class="feature-desc" id="f1desc">Open hand, index finger, V sign and more — control your music exactly how you want.</div></div>
-  <div class="feature"><div class="feature-icon">🔒</div><div class="feature-title" id="f2title">Privacy First</div><div class="feature-desc" id="f2desc">Your camera feed never leaves your browser. All processing happens locally on your device.</div></div>
-  <div class="feature"><div class="feature-icon">🎵</div><div class="feature-title" id="f3title">YouTube Support</div><div class="feature-desc" id="f3desc">Control YouTube videos with gestures. Spotify support coming soon.</div></div>
+  <div class="feature"><div class="feature-icon" aria-hidden="true">✋</div><div class="feature-title" id="f1title">5 Gestures, Full Control</div><div class="feature-desc" id="f1desc">Open hand, index finger, V sign and more — control your music exactly how you want.</div></div>
+  <div class="feature"><div class="feature-icon" aria-hidden="true">🔒</div><div class="feature-title" id="f2title">Privacy First</div><div class="feature-desc" id="f2desc">Your camera feed never leaves your browser. All processing happens locally on your device.</div></div>
+  <div class="feature"><div class="feature-icon" aria-hidden="true">🎵</div><div class="feature-title" id="f3title">YouTube Support</div><div class="feature-desc" id="f3desc">Control YouTube videos with gestures. Spotify support coming soon.</div></div>
 </div>
 
 <div class="gestures-section">
   <h2 id="gesturesTitle">Gestures</h2>
   <div class="gesture-grid">
-    <div class="gesture-card"><div class="icon">✋</div><div class="name" id="g1name">Open Hand</div><div class="action" id="g1action">Play / Pause</div></div>
-    <div class="gesture-card"><div class="icon">☝️</div><div class="name" id="g2name">Index Finger</div><div class="action" id="g2action">Next Track</div></div>
-    <div class="gesture-card"><div class="icon">✌️</div><div class="name" id="g3name">V Sign</div><div class="action" id="g3action">Previous Track</div></div>
-    <div class="gesture-card"><div class="icon">🤌</div><div class="name" id="g4name">Thumb+Index Open</div><div class="action" id="g4action">Volume Up</div></div>
-    <div class="gesture-card"><div class="icon">👌</div><div class="name" id="g5name">Thumb+Index Closed</div><div class="action" id="g5action">Volume Down</div></div>
+    <div class="gesture-card"><div class="icon" aria-hidden="true">✋</div><div class="name" id="g1name">Open Hand</div><div class="action" id="g1action">Play / Pause</div></div>
+    <div class="gesture-card"><div class="icon" aria-hidden="true">☝️</div><div class="name" id="g2name">Index Finger</div><div class="action" id="g2action">Next Track</div></div>
+    <div class="gesture-card"><div class="icon" aria-hidden="true">✌️</div><div class="name" id="g3name">V Sign</div><div class="action" id="g3action">Previous Track</div></div>
+    <div class="gesture-card"><div class="icon" aria-hidden="true">🤌</div><div class="name" id="g4name">Thumb+Index Open</div><div class="action" id="g4action">Volume Up</div></div>
+    <div class="gesture-card"><div class="icon" aria-hidden="true">👌</div><div class="name" id="g5name">Thumb+Index Closed</div><div class="action" id="g5action">Volume Down</div></div>
   </div>
 </div>
 
 <footer>
-  <p>© 2026 GestureControl &nbsp;·&nbsp; <a id="footerAbout" href="https://gesturecontrol.app/about.html">About</a> &nbsp;·&nbsp; <a id="footerPrivacy" href="https://gesturecontrol.app/privacy.html">Privacy Policy</a></p>
+  <p>© 2026 GestureControl &nbsp;·&nbsp; <a id="footerAbout" href="https://gesturecontrol.app/about.html" aria-current="page">About</a> &nbsp;·&nbsp; <a id="footerPrivacy" href="https://gesturecontrol.app/privacy.html">Privacy Policy</a></p>
 </footer>
 
 <script>
-const T={en:{tryBtn:'Try it →',tryBtn2:'Try it Free →',heroTitle:'Control music with your hands',heroDesc:'While cooking, working out, or whenever your hands are busy — just look at your camera and gesture.',f1title:'5 Gestures, Full Control',f1desc:'Open hand, index finger, V sign and more — control your music exactly how you want.',f2title:'Privacy First',f2desc:'Your camera feed never leaves your browser. All processing happens locally on your device.',f3title:'YouTube Support',f3desc:'Control YouTube videos with gestures. Spotify support coming soon.',gesturesTitle:'Gestures',g1name:'Open Hand',g1action:'Play / Pause',g2name:'Index Finger',g2action:'Next Track',g3name:'V Sign',g3action:'Previous Track',g4name:'Thumb+Index Open',g4action:'Volume Up',g5name:'Thumb+Index Closed',g5action:'Volume Down',footerAbout:'About',footerPrivacy:'Privacy Policy'},tr:{tryBtn:'Dene →',tryBtn2:'Ücretsiz Dene →',heroTitle:'Müziği ellerinizle kontrol edin',heroDesc:'Yemek yaparken, spor yaparken ya da elleriniz meşgulken — kameranıza bakın ve jest yapın.',f1title:'5 Jest, Tam Kontrol',f1desc:'Açık el, işaret parmağı, V işareti ve daha fazlası — müziğinizi tam istediğiniz gibi kontrol edin.',f2title:'Gizlilik Önce Gelir',f2desc:'Kamera görüntünüz tarayıcınızı terk etmez. Tüm işlemler cihazınızda yerel olarak gerçekleşir.',f3title:'YouTube Desteği',f3desc:'YouTube videolarını jestlerle kontrol edin. Spotify desteği yakında geliyor.',gesturesTitle:'Jestler',g1name:'Açık El',g1action:'Oynat / Durdur',g2name:'İşaret Parmağı',g2action:'Sonraki Şarkı',g3name:'V İşareti',g3action:'Önceki Şarkı',g4name:'Baş+İşaret Açık',g4action:'Ses Aç',g5name:'Baş+İşaret Kapalı',g5action:'Ses Kıs',footerAbout:'Hakkında',footerPrivacy:'Gizlilik Politikası'}};
-function setLang(lang){localStorage.setItem('lang',lang);document.getElementById('htmlRoot').lang=lang;document.getElementById('btnEN').className='lang-btn'+(lang==='en'?' active':'');document.getElementById('btnTR').className='lang-btn'+(lang==='tr'?' active':'');Object.keys(T[lang]).forEach(k=>{const el=document.getElementById(k);if(el)el.textContent=T[lang][k];});}
-setLang(localStorage.getItem('lang')||'en');
+const T={
+  en:{
+    tryBtnHeader:'Try it →',tryBtnHero:'Try it Free →',
+    heroTitle:'Control music with your hands',
+    heroDesc:'While cooking, working out, or whenever your hands are busy — just look at your camera and gesture.',
+    f1title:'5 Gestures, Full Control',f1desc:'Open hand, index finger, V sign and more — control your music exactly how you want.',
+    f2title:'Privacy First',f2desc:'Your camera feed never leaves your browser. All processing happens locally on your device.',
+    f3title:'YouTube Support',f3desc:'Control YouTube videos with gestures. Spotify support coming soon.',
+    gesturesTitle:'Gestures',
+    g1name:'Open Hand',g1action:'Play / Pause',
+    g2name:'Index Finger',g2action:'Next Track',
+    g3name:'V Sign',g3action:'Previous Track',
+    g4name:'Thumb+Index Open',g4action:'Volume Up',
+    g5name:'Thumb+Index Closed',g5action:'Volume Down',
+    footerAbout:'About',footerPrivacy:'Privacy Policy'
+  },
+  tr:{
+    tryBtnHeader:'Dene →',tryBtnHero:'Ücretsiz Dene →',
+    heroTitle:'Müziği ellerinizle kontrol edin',
+    heroDesc:'Yemek yaparken, spor yaparken ya da elleriniz meşgulken — kameranıza bakın ve jest yapın.',
+    f1title:'5 Jest, Tam Kontrol',f1desc:'Açık el, işaret parmağı, V işareti ve daha fazlası — müziğinizi tam istediğiniz gibi kontrol edin.',
+    f2title:'Gizlilik Önce Gelir',f2desc:'Kamera görüntünüz tarayıcınızı terk etmez. Tüm işlemler cihazınızda yerel olarak gerçekleşir.',
+    f3title:'YouTube Desteği',f3desc:'YouTube videolarını jestlerle kontrol edin. Spotify desteği yakında geliyor.',
+    gesturesTitle:'Jestler',
+    g1name:'Açık El',g1action:'Oynat / Durdur',
+    g2name:'İşaret Parmağı',g2action:'Sonraki Şarkı',
+    g3name:'V İşareti',g3action:'Önceki Şarkı',
+    g4name:'Baş+İşaret Açık',g4action:'Ses Aç',
+    g5name:'Baş+İşaret Kapalı',g5action:'Ses Kıs',
+    footerAbout:'Hakkında',footerPrivacy:'Gizlilik Politikası'
+  }
+};
+
+function setLang(lang) {
+  // localStorage erişimini güvenli hale getir (private browsing için)
+  try {
+    localStorage.setItem('lang', lang);
+  } catch(e) {}
+
+  document.documentElement.setAttribute('lang', lang);
+
+  // aria-pressed ile aktif dil butonunu belirt
+  document.getElementById('btnEN').setAttribute('aria-pressed', lang === 'en' ? 'true' : 'false');
+  document.getElementById('btnTR').setAttribute('aria-pressed', lang === 'tr' ? 'true' : 'false');
+  document.getElementById('btnEN').className = 'lang-btn' + (lang === 'en' ? ' active' : '');
+  document.getElementById('btnTR').className = 'lang-btn' + (lang === 'tr' ? ' active' : '');
+
+  // Footer'daki "About" linkinin aria-current durumunu dil ile güncelle
+  const footerAboutEl = document.getElementById('footerAbout');
+  if (footerAboutEl) footerAboutEl.setAttribute('aria-current', 'page');
+
+  Object.keys(T[lang]).forEach(k => {
+    const el = document.getElementById(k);
+    if (el) el.textContent = T[lang][k];
+  });
+}
+
+// localStorage'ı güvenli oku
+function getSavedLang() {
+  try {
+    return localStorage.getItem('lang');
+  } catch(e) {
+    return null;
+  }
+}
+
+setLang(getSavedLang() || 'en');
 </script>
 </body>
 </html>
